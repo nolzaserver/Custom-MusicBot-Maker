@@ -44,6 +44,8 @@ public class MusicListener extends ListenerAdapter {
 
     public String CONNECT_COMMAND = command.get("connectCommand").getAsString();
     public String DISCONNECT_COMMAND = command.get("disconnectCommand").getAsString();
+    public String QUEUE_COMMAND = command.get("queueCommand").getAsString();
+
     public char PREFIX = command.get("prefix").getAsString().charAt(0);
 
     public static final EasyEqual e = new EasyEqual();
@@ -110,6 +112,12 @@ public class MusicListener extends ListenerAdapter {
                 // TODO : Skip All Tracks
                 am.closeAudioConnection();
                 c.sendMessage(DISCONNECT_VOICE_CHANNEL).queue();
+
+            }
+
+            if (e.eq(args[0], QUEUE_COMMAND)) {
+
+
 
             }
 

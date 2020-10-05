@@ -1,6 +1,7 @@
 {
     "connectCommand": "c",
     "disconnectCommand": "e",
+    "queueCommand": "p",
 
     "prefix" : ","
 }
