@@ -21,5 +21,4 @@
     "shutdownBot" : "봇을 종료할게요!",
 
     "timeStamp" : "%d시간 %d분 %d초",
-    "prefix" : ","
 }

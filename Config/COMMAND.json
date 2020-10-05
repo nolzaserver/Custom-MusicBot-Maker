@@ -1,4 +1,6 @@
 {
     "connectCommand": "c",
-    "disconnectCommand": "e"
+    "disconnectCommand": "e",
+
+    "prefix" : ","
 }

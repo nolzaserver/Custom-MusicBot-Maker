@@ -44,8 +44,8 @@ public class MusicListener extends ListenerAdapter {
 
     public String CONNECT_COMMAND = command.get("connectCommand").getAsString();
     public String DISCONNECT_COMMAND = command.get("disconnectCommand").getAsString();
+    public char PREFIX = command.get("prefix").getAsString().charAt(0);
 
-    public char PREFIX = message.get("prefix").getAsString().charAt(0);
     public static final EasyEqual e = new EasyEqual();
 
     @Override
