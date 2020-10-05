@@ -2,6 +2,13 @@
     "connectCommand": "c",
     "disconnectCommand": "e",
     "queueCommand": "p",
+    "skipCommand": "s",
+    "volumeCommand": "vol",
+    "nowPlayingCommand": "np",
+    "shuffleCommand": "sf",
+    "repeatCommand": "rp",
+    "showListCommand": "list",
+    "shutdownCommand": "bye",
 
     "prefix" : ","
 }
