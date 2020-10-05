@@ -41,7 +41,7 @@ public class YoutubeAPI {
                     .setType("video")
                     // .setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)")
                     .setFields("items(id/videoId)")
-                    .setKey(r.readString(BotBuilder.YOU_OAUTH))
+                    .setKey(BotBuilder.YOU_OAUTH)
                     .execute()
                     .getItems();
 
