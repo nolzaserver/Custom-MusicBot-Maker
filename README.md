@@ -3,7 +3,7 @@
 ### Custom-MusicBot-Maker was written based on the source code of 'QuintupleV2'.
 
 ## 준비물
-Discord 계정과 Youtube(Google) 계정
+Discord 계정과 Youtube(Google) 계정, Java 8
 
 ## I. 디스코드 설정  
 이 봇이 작동하려면, Discord Bot Token이 필요합니다.
@@ -38,3 +38,32 @@ Youtube API 세팅 또한 필요합니다.
 ![Tutorial5](https://user-images.githubusercontent.com/64447484/95121368-e9d69400-0789-11eb-94f6-a3045446b2f8.png)
 9. 빨간색으로 밑줄 표시 된 버튼을 클릭하여 다른 곳에 붙여넣기 해 두고, 완료 버튼을 누릅니다.  
 ![Tutorial6](https://user-images.githubusercontent.com/64447484/95121378-ee02b180-0789-11eb-9988-6065c8a8afbe.png)
+
+## III. 커스텀 뮤직봇 메이커 세팅
+
+이제 본격적으로 사용해볼 시간입니다. 복사해 둔 Discord 토큰과 Youtube API 키를 준비해야 합니다.  
+1. `TOKEN.txt`에 Discord 토큰을 넣고, `YOUTUBE_API_KEY.txt`에 Youtube API 키를 넣습니다.
+2. `RUN.bat`을 실행하면 잘 실행됩니다.
+  
+자신만의 뮤직봇을 만들기 위해 메시지 커스텀 또한 가능합니다.
+1. `Config` 폴더를 엽니다.
+2. `MESSAGE.json`은 전송할 메시지를, `COMMAND.json`은 명령어입니다. 봇의 상태 메시지를 지정하려면 `ACTIVITY.txt`를 설정하면 됩니다.
+
+MESSAGE.json은 자유로이 수정할 수 있습니다. 하지만 `%s`나 `%d`와 같은 친구들은 건들이지 말아 주세요.
+COMMAND.json의 편집 도움말입니다. 원래는 다르게 씌여 있습니다.
+```json
+{
+    "connectCommand": "보이스 채널에 접속하는 명령어입니다.",
+    "disconnectCommand": "보이스 채널에서 연결을 끊는 명령어입니다.",
+    "queueCommand": "음악을 추가하고 재생하는 명령어입니다.",
+    "skipCommand": "음악을 스킵하는 명령어입니다.",
+    "volumeCommand": "볼륨을 조정하는 명령어입니다.",
+    "nowPlayingCommand": "현재 재생 중인 곡을 표시해주는 명령어입니다.",
+    "shuffleCommand": "셔플 명령어입니다.",
+    "repeatCommand": "반복 명령어입니다.",
+    "showListCommand": "큐에 등록되어 있는 리스트를 표시해주는 명령어입니다.",
+    "shutdownCommand": "봇을 끄는 명령어입니다.",
+
+    "prefix" : "명령어 앞에 붙는 기호입니다. 한 글자만 쓸 수 있습니다."
+}
+```
