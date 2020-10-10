@@ -3,7 +3,7 @@
 ### Custom-MusicBot-Maker was written based on the source code of 'QuintupleV2'.
 
 ## 준비물
-Discord 계정과 Youtube(Google) 계정, Java 8
+Discord 계정과 Youtube(Google) 계정, [Java 8](https://java.com/ko/download/)
 
 ## I. 디스코드 설정  
 이 봇이 작동하려면, Discord Bot Token이 필요합니다.
@@ -27,7 +27,7 @@ Youtube API 세팅 또한 필요합니다.
 1. 먼저, https://console.developers.google.com/ 로 들어가서 로그인을 해 주세요.
 2. '이 페이지를 보려면 프로젝트를 선택하세요'라는 블록이 보인다면, 프로젝트 만들기 버튼을 눌러 주세요.  
 ![Tutorial2](https://user-images.githubusercontent.com/64447484/95121223-b5fb6e80-0789-11eb-97b6-de710dd10861.png)
-3. 프로젝트 이름 칸에 'CustomMusicBot'을 입력해 주고, 만들기 버튼을 눌러 주세요.
+3. 프로젝트 이름 칸에 'CustomMusicBot'을 입력해 주고(대소문자도 똑같이 구별해 주세요), 만들기 버튼을 눌러 주세요.
 4. 조금 기다리면 아래와 같은 창이 표시될 겁니다. 'API 라이브러리로 이동' 하이퍼링크를 클릭해 주세요.  
 ![Tutorial3](https://user-images.githubusercontent.com/64447484/95121289-d0cde300-0789-11eb-870e-b847c851895b.png)
 5. 'API 및 서비스 검색' 블록에 'Youtube Data API v3'을 입력해 줍니다.
