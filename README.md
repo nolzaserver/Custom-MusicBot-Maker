@@ -1,5 +1,6 @@
 # Custom-MusicBot-Maker
 > 쉽고 간편한 나만의 디스코드 뮤직 봇 만들기
+> Easy, comportable, Custom Musicbot Maker.
 ### Custom-MusicBot-Maker was written based on the source code of 'QuintupleV2'.
 
 ## 준비물
@@ -68,7 +69,12 @@ To use the 'Search' feature, you need to set up YouTube API.
 ![Tutorial3](https://user-images.githubusercontent.com/64447484/95121289-d0cde300-0789-11eb-870e-b847c851895b.png)
 5. Input 'Youtube Data API v3' into 'Search API and service' block.
 6. Click 'Youtube Data API v3' button, then click 'use' button.
-7. 
+7. If you can see this block, click 'Make user authentication information' button.
+![Tutorial4](https://user-images.githubusercontent.com/64447484/95121351-e4794980-0789-11eb-8995-25a399a03f72.png)
+8. When the window for adding user authentication information to the project is displayed, make the following settings and click the blue button.
+![Tutorial5](https://user-images.githubusercontent.com/64447484/95121368-e9d69400-0789-11eb-94f6-a3045446b2f8.png)
+9. Click the button underlined in red to paste it elsewhere, then click the Done button.
+![Tutorial6](https://user-images.githubusercontent.com/64447484/95121378-ee02b180-0789-11eb-9988-6065c8a8afbe.png)
 
 ## III. 커스텀 뮤직봇 메이커 세팅
 
@@ -96,5 +102,33 @@ COMMAND.json의 편집 도움말입니다. 원래는 다르게 씌여 있습니�
     "shutdownCommand": "봇을 끄는 명령어입니다.",
 
     "prefix" : "명령어 앞에 붙는 기호입니다. 한 글자만 쓸 수 있습니다."
+}
+```
+
+## III. Setting Custom Music Bot
+
+Now, you can use this repository. You will need to have a copy of your Discord token and Youtube API key.
+1. Input Discord Bot Token into `TOKEN.txt`, then input Youtube API Key into `YOUTUBE_API_KEY.txt`.
+2. Execute `RUN.bat`.
+
+You can customize messages of this repository. Don't edit things like `%s` and `%d` please.
+1. Open `Config` Directory.
+2. `MESSAGE.json` is a message info json file, `COMMAND.json` is a command info json file. To edit activity message of bot, edit `ACTIVITY.txt`.
+
+This is editting help of `COMMAND.json`. It will be written differently.
+```json
+{
+    "connectCommand": "Connect to voice channel.",
+    "disconnectCommand": "Disconnect from voice channel.",
+    "queueCommand": "Add a music into queue.",
+    "skipCommand": "Skip track(s).",
+    "volumeCommand": "Adjusment volume.",
+    "nowPlayingCommand": "Send now playing track information.",
+    "shuffleCommand": "Shuffle queue.",
+    "repeatCommand": "Repeat a track.",
+    "showListCommand": "Send queue list.",
+    "shutdownCommand": "Shutdown bot.",
+
+    "prefix" : "This is the symbol that precedes the command. You can only write one letter."
 }
 ```
