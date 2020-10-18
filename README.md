@@ -5,6 +5,9 @@
 ## 준비물
 Discord 계정과 Youtube(Google) 계정, [Java 8](https://java.com/ko/download/)
 
+## Rquired
+A discord account, a YouTube(Google) accout. [Java 8](https://java.com/ko/download/)
+
 ## I. 디스코드 설정  
 이 봇이 작동하려면, Discord Bot Token이 필요합니다.
 
@@ -18,6 +21,20 @@ Discord 계정과 Youtube(Google) 계정, [Java 8](https://java.com/ko/download/
 8. 아래로 조금 내려 Privileged Gateway Intents 항목의 두 스위치를 모두 켭니다. (PRESENCE INTENT, SERVER MEMBERS INTENT 항목)
 9. 'Save Changes' 버튼을 누릅니다.
 10. 다시 맨 위로 올라와서, 'TOKEN' 항목의 'Copy' 버튼을 클릭하고 다른 곳에 붙여넣기해 둡니다.
+
+## I. Discord bot setting
+This repository needs 'Discord Bot Token'.
+
+1. Connect to https://discord.com/developers/applications (You may need to log in.)
+2. If you can see 'Applications' window, click 'New Application' button. (It's in the top right.)
+3. Input bot's name into 'NAME' text box, then click blue color button.
+4. Copy the numbers in the 'CLIENT ID' section and paste it elsewhere. (Or, click the Copy button.)
+5. Click 'Bot' menu in left sections.
+6. Click 'Add Bot' button in 'Build-A-Bot' section.
+7. Set bot's profile image and bot's name.
+8. Scroll down a little and turn on both switches under Privileged Gateway Intents. (PRESENCE INTENT, SERVER MEMBERS INTENT items)
+9. Click 'Save Changes'.
+10. Scroll up to the top, click 'Copy' button in 'TOKEN' section, then paste it elsewhere.
 
 ## II. Youtube API 세팅 (선택)
 
@@ -38,6 +55,19 @@ Youtube API 세팅 또한 필요합니다.
 ![Tutorial5](https://user-images.githubusercontent.com/64447484/95121368-e9d69400-0789-11eb-94f6-a3045446b2f8.png)
 9. 빨간색으로 밑줄 표시 된 버튼을 클릭하여 다른 곳에 붙여넣기 해 두고, 완료 버튼을 누릅니다.  
 ![Tutorial6](https://user-images.githubusercontent.com/64447484/95121378-ee02b180-0789-11eb-9988-6065c8a8afbe.png)
+
+## II. Youtube API Setting
+
+To use the 'Search' feature, you need to set up YouTube API.
+
+1. Connect to https://console.developers.google.com/ and log in.
+2. If you can see 'Please select a project to view this page', click 'Make a project' button.
+![Tutorial2](https://user-images.githubusercontent.com/64447484/95121223-b5fb6e80-0789-11eb-97b6-de710dd10861.png)
+3. Input 'CustomMusicBot'(Please be case sensitive), and click 'make' button.
+4. Wait for a while and the window below will appear, click 'Go to API Libraries' hyperlink.
+![Tutorial3](https://user-images.githubusercontent.com/64447484/95121289-d0cde300-0789-11eb-870e-b847c851895b.png)
+5. Input 'Youtube Data API v3' into 'Search API and service' block.
+6. 
 
 ## III. 커스텀 뮤직봇 메이커 세팅
 
