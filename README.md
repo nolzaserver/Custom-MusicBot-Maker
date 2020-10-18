@@ -67,7 +67,8 @@ To use the 'Search' feature, you need to set up YouTube API.
 4. Wait for a while and the window below will appear, click 'Go to API Libraries' hyperlink.
 ![Tutorial3](https://user-images.githubusercontent.com/64447484/95121289-d0cde300-0789-11eb-870e-b847c851895b.png)
 5. Input 'Youtube Data API v3' into 'Search API and service' block.
-6. 
+6. Click 'Youtube Data API v3' button, then click 'use' button.
+7. 
 
 ## III. 커스텀 뮤직봇 메이커 세팅
 
