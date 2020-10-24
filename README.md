@@ -86,7 +86,7 @@ To use the 'Search' feature, you need to set up YouTube API.
 1. `Config` 폴더를 엽니다.
 2. `MESSAGE.json`은 전송할 메시지를, `COMMAND.json`은 명령어입니다. 봇의 상태 메시지를 지정하려면 `ACTIVITY.txt`를 설정하면 됩니다.
 
-MESSAGE.json은 자유로이 수정할 수 있습니다. 하지만 `%s`나 `%d`와 같은 친구들은 건들이지 말아 주세요.
+MESSAGE.json은 자유로이 수정할 수 있습니다. 하지만 `{track_title}`나 `{voice_channel_name}`와 같은 친구들은 건들이지 말아 주세요.
 COMMAND.json의 편집 도움말입니다. 원래는 다르게 씌여 있습니다.
 ```json
 {
@@ -111,7 +111,7 @@ Now, you can use this repository. You will need to have a copy of your Discord t
 1. Input Discord Bot Token into `TOKEN.txt`, then input Youtube API Key into `YOUTUBE_API_KEY.txt`.
 2. Execute `RUN.bat`.
 
-You can customize messages of this repository. Don't edit things like `%s` and `%d` please.
+You can customize messages of this repository. Don't edit things like `{track_title}` and `{voice_channel_name}` please.
 1. Open `Config` Directory.
 2. `MESSAGE.json` is a message info json file, `COMMAND.json` is a command info json file. To edit activity message of bot, edit `ACTIVITY.txt`.
 
