@@ -76,7 +76,32 @@ public class MusicListener extends ListenerAdapter {
     private final Map<Long, GuildMusicManager> musicManagers;
 
     StringBuffer sb = new StringBuffer();
-    Formatter f = new Formatter(sb);
+
+    public String r(String str, String ... rp) {
+
+        // Array replacer description
+        // How to Use : `r(String, "FromString", "ToString", "FromString2", "ToString2"...)`;
+        // Example : `r("Hello, Mr. My Yesterday", "Hello,", "Hi!", " Mr.", "", "Yesterday", "Name is 'CustomMusicBot'!")`
+
+        // Example BF/AF
+        // Before : "Hello, Mr. My Yesterday"
+        // After : "Hi! My Name is 'CustomMusicBot'!"
+
+        // Real Usage (channelName = "I / Party Room"
+        // r("I connected to `{voice_channel_name}`!", "{voice_channel_name}", channelName);
+        // Before : "I connected to `{voice_channel_name}`!"
+        // After : "I connected to `I / Party Room`!"
+
+        for (int rl = 0; rl < rp.length; rl += 2) {
+            str = str.replace(rp[rl], rp[rl + 1]);
+            if (rl + 1 >= rp.length) {
+                break;
+            }
+        }
+
+        return str;
+
+    }
 
     public MusicListener() {
         this.musicManagers = new HashMap();
@@ -89,7 +114,6 @@ public class MusicListener extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
         sb = new StringBuffer();
-        f = new Formatter(sb);
 
         User user = event.getAuthor();
         Member member = event.getMember();
@@ -132,8 +156,8 @@ public class MusicListener extends ListenerAdapter {
                         am.openAudioConnection(v);
                         // TODO : Set Volume
 
-                        f.format(CONNECT_VOICE_CHANNEL, v.getName());
-                        c.sendMessage(f.toString()).queue();
+                        c.sendMessage(r(CONNECT_VOICE_CHANNEL, "{voice_channel_name}", v.getName())).queue();
+                        
                     }
 
                 } catch (NullPointerException e) {
@@ -175,9 +199,8 @@ public class MusicListener extends ListenerAdapter {
                         });
 
                         am.openAudioConnection(v);
-
-                        f.format(CONNECT_VOICE_CHANNEL, v.getName());
-                        c.sendMessage(f.toString()).queue();
+                        
+                        c.sendMessage(r(CONNECT_VOICE_CHANNEL, "{voice_channel_name}", v.getName())).queue();
                     }
 
                     YoutubeAPI youtube = new YoutubeAPI();
@@ -262,9 +285,7 @@ public class MusicListener extends ListenerAdapter {
                     long queueLength = 0;
                     StringBuilder sb = new StringBuilder();
 
-                    f.format(NOW_PLAYING_QUEUE_LIST, queue.size());
-
-                    sb.append("```md\n# ").append(f.toString()).append("\n\n");
+                    sb.append("```md\n# ").append(r(NOW_PLAYING_QUEUE_LIST, "{queue_amount}", String.valueOf(queue.size()))).append("\n\n");
 
                     for (AudioInfo info : queue) {
                         queueLength += info.getTrack().getDuration();
@@ -293,7 +314,7 @@ public class MusicListener extends ListenerAdapter {
     public void loadAndPlay(final TextChannel tc, String url, boolean showMessage, Member user) {
 
         sb = new StringBuffer();
-        f = new Formatter(sb);
+        
         if (user == null) return;
 
         GuildMusicManager musicManager = getGuildAudioPlayer(tc.getGuild());
@@ -315,16 +336,16 @@ public class MusicListener extends ListenerAdapter {
                 int seconds = (int) (af / 1000) % 60;
                 int minutes = (int) ((af / (1000 * 60)) % 60);
                 int hours = (int) ((af / (1000 * 60 * 60)));
-
-                String timeStamp = f.format(TIME_STAMP, hours, minutes, seconds).toString();
-
+                
+                String timeStamp = r(TIME_STAMP, "{hour}", String.valueOf(hours), "{minitue}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
                 sb = new StringBuffer();
-                f = new Formatter(sb);
-
                 EmbedBuilder eb = new EmbedBuilder();
-                f.format(ADDED_MUSIC_IN_QUEUE, audioTrack.getInfo().title, audioTrack.getInfo().author, timeStamp);
 
-                eb.setDescription("[" + f.toString() + "](" + trackUrl + ")]");
+                eb.setDescription("[" + r(ADDED_MUSIC_IN_QUEUE, 
+                        "{track_title}", audioTrack.getInfo().title,
+                        "{track_channel}", audioTrack.getInfo().author,
+                        "{track_duration}", timeStamp
+                ) + "](" + trackUrl + ")]");
                 eb.setColor(Color.CYAN);
 
                 YoutubeAPI y = new YoutubeAPI();
@@ -350,15 +371,15 @@ public class MusicListener extends ListenerAdapter {
                 int minutes = (int) ((af / (1000 * 60)) % 60);
                 int hours = (int) ((af / (1000 * 60 * 60)));
 
-                String timeStamp = f.format(TIME_STAMP, hours, minutes, seconds).toString();
-
+                String timeStamp = r(TIME_STAMP, "{hour}", String.valueOf(hours), "{minitue}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
                 sb = new StringBuffer();
-                f = new Formatter(sb);
-
                 EmbedBuilder eb = new EmbedBuilder();
-                f.format(ADDED_MUSIC_IN_QUEUE, firstTrack.getInfo().title, firstTrack.getInfo().author, timeStamp);
 
-                eb.setDescription("[" + f.toString() + "](" + trackUrl + ")]");
+                eb.setDescription("[" + r(ADDED_MUSIC_IN_QUEUE, 
+                        "{track_title}", firstTrack.getInfo().title,
+                        "{track_channel}", firstTrack.getInfo().author,
+                        "{track_duration}", timeStamp
+                ) + "](" + trackUrl + ")]");
                 eb.setColor(Color.CYAN);
 
                 YoutubeAPI y = new YoutubeAPI();
@@ -405,7 +426,7 @@ public class MusicListener extends ListenerAdapter {
     private synchronized GuildMusicManager getGuildAudioPlayer(Guild guild) {
 
         sb = new StringBuffer();
-        f = new Formatter(sb);
+        
         long guildId = Long.parseLong(guild.getId());
         GuildMusicManager musicManager = musicManagers.get(guildId);
 
@@ -427,7 +448,7 @@ public class MusicListener extends ListenerAdapter {
     public void skipTrack(TextChannel tc, boolean showMessage) {
 
         sb = new StringBuffer();
-        f = new Formatter(sb);
+        
         GuildMusicManager musicManager = getGuildAudioPlayer(tc.getGuild());
         musicManager.scheduler.nextTrack();
 
@@ -445,16 +466,14 @@ public class MusicListener extends ListenerAdapter {
     public void skipTrack(TextChannel tc, int value, boolean showMessage) {
 
         sb = new StringBuffer();
-        f = new Formatter(sb);
+        
         GuildMusicManager musicManager = getGuildAudioPlayer(tc.getGuild());
         musicManager.scheduler.nextTrack(value);
 
         if (showMessage) {
             EmbedBuilder eb = new EmbedBuilder();
 
-            f.format(SKIP_TRACKS, value);
-
-            eb.setDescription(f.toString());
+            eb.setDescription(r(SKIP_TRACKS, String.valueOf(value)));
             eb.setColor(Color.CYAN);
 
             tc.sendMessage(eb.build()).queue();
@@ -466,7 +485,7 @@ public class MusicListener extends ListenerAdapter {
         GuildMusicManager musicManager = getGuildAudioPlayer(tc.getGuild());
 
         sb = new StringBuffer();
-        f = new Formatter(sb);
+        
 
         musicManager.pl.stopTrack();
         musicManager.scheduler.queue.clear();
@@ -486,7 +505,7 @@ public class MusicListener extends ListenerAdapter {
 
     public void setVolume(TextChannel tc, int volume, boolean showMessage) {
         sb = new StringBuffer();
-        f = new Formatter(sb);
+        
 
         GuildMusicManager musicManager = getGuildAudioPlayer(tc.getGuild());
 
@@ -513,7 +532,7 @@ public class MusicListener extends ListenerAdapter {
 
     public void sendNowPlaying(TextChannel tc) {
         sb = new StringBuffer();
-        f = new Formatter(sb);
+        
 
         try {
             GuildMusicManager musicManager = getGuildAudioPlayer(tc.getGuild());
@@ -528,10 +547,13 @@ public class MusicListener extends ListenerAdapter {
             int minutes = (int) ((as / (1000 * 60)) % 60);
             int hours = (int) ((as / (1000 * 60 * 60)));
 
-            String timeStamp = f.format(TIME_STAMP, hours, minutes, seconds).toString();
-            f.format(NOW_PLAYING_TRACK_INFO, audioTrack.getInfo().title, audioTrack.getInfo().author, timeStamp);
+            String timeStamp = r(TIME_STAMP, "{hour}", String.valueOf(hours), "{minitue}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
 
-            eb.setDescription("[" + f.toString() + "](" + af.uri + ")]");
+            eb.setDescription("[" + r(NOW_PLAYING_TRACK_INFO, 
+                    "{track_title}", audioTrack.getInfo().title,
+                    "{track_channel}", audioTrack.getInfo().author,
+                    "{track_duration}", timeStamp
+            ) + "](" + af.uri + ")]");
 
             tc.sendMessage(eb.build()).queue();
         } catch (NullPointerException e) {
