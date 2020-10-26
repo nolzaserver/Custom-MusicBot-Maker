@@ -1,5 +1,7 @@
 package com.projectdecuple;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.projectdecuple.Core.Music.AudioInfo;
@@ -48,7 +50,7 @@ public class MusicListener extends ListenerAdapter {
     public String SET_HIGHER_VOLUME = message.get("setHigherVolume").getAsString();
     public String NOW_PLAYING_TRACK_INFO = message.get("nowPlayingTrackInfo").getAsString();
     public String NOT_PLAYING_TRACK_MESSAGE = message.get("notPlayingTrackMessage").getAsString();
-    public String OUT_OF_CHART_RANGE = message.get("outOfChartRange").getAsString();
+    // public String OUT_OF_CHART_RANGE = message.get("outOfChartRange").getAsString();
     public String SHUFFLED_QUEUE = message.get("shuffledQueue").getAsString();
     public String ENABLED_REPEAT_TRACK = message.get("enabledRepeatTrack").getAsString();
     public String DISABLED_REPEAT_TRACK = message.get("disabledRepeatTrack").getAsString();
@@ -57,6 +59,7 @@ public class MusicListener extends ListenerAdapter {
     public String SHUTDOWN_BOT = message.get("shutdownBot").getAsString();
     public String TIME_STAMP = message.get("timeStamp").getAsString();
 
+    /* Before v1.2.0
     public String CONNECT_COMMAND = command.get("connectCommand").getAsString();
     public String DISCONNECT_COMMAND = command.get("disconnectCommand").getAsString();
     public String QUEUE_COMMAND = command.get("queueCommand").getAsString();
@@ -67,6 +70,32 @@ public class MusicListener extends ListenerAdapter {
     public String REPEAT_COMMAND = command.get("repeatCommand").getAsString();
     public String SHOW_LIST_COMMAND = command.get("showListCommand").getAsString();
     public String SHUTDOWN_COMMAND = command.get("shutdownCommand").getAsString();
+     */
+
+    public enum Command {
+
+        CONNECT_COMMAND(cmdGetter("connectCommand")),
+        DISCONNECT_COMMAND(cmdGetter("disconnectCommand")),
+        QUEUE_COMMAND(cmdGetter("queueCommand")),
+        SKIP_COMMAND(cmdGetter("skipCommand")),
+        VOLUME_COMMAND(cmdGetter("volumeCommand")),
+        NOW_PLAYING_COMMAND(cmdGetter("nowPlayingCommand")),
+        SHUFFLE_COMMAND(cmdGetter("shuffleCommand")),
+        REPEAT_COMMAND(cmdGetter("repeatCommand")),
+        SHOW_LIST_COMMAND(cmdGetter("showListCommand")),
+        SHUTDOWN_COMMAND(cmdGetter("shutdownCommand"));
+
+        private final String[] command;
+
+        Command(String[] command) {
+            this.command = command;
+        }
+
+        String[] getCommand() {
+            return command;
+        }
+
+    }
 
     public char PREFIX = command.get("prefix").getAsString().charAt(0);
 
@@ -76,6 +105,27 @@ public class MusicListener extends ListenerAdapter {
     private final Map<Long, GuildMusicManager> musicManagers;
 
     StringBuffer sb = new StringBuffer();
+
+    // -- Using Utils -- //
+    public static String[] jsonArrayToStrArray(JsonArray arrays) {
+
+        ArrayList<String> result = new ArrayList<>();
+
+        for (JsonElement strArray : arrays) {
+            result.add(strArray.getAsString());
+        }
+
+        return result.toArray(new String[arrays.size()]);
+
+    }
+
+    public static String[] cmdGetter(String get) {
+
+        return command.get(get).getClass() == JsonArray.class ?
+                jsonArrayToStrArray(command.get(get).getAsJsonArray()) :
+                new String[] {command.get(get).getAsJsonPrimitive().getAsString()};
+
+    }
 
     public String r(String str, String ... rp) {
 
@@ -102,6 +152,8 @@ public class MusicListener extends ListenerAdapter {
         return str;
 
     }
+
+    // -- Real Sources -- //
 
     public MusicListener() {
         this.musicManagers = new HashMap();
@@ -133,7 +185,7 @@ public class MusicListener extends ListenerAdapter {
             if (member == null) return;
             if (args.length <= 0) return;
 
-            if (e.eq(args[0], CONNECT_COMMAND)) {
+            if (e.eq(args[0], Command.CONNECT_COMMAND.getCommand())) {
 
                 try {
 
@@ -166,7 +218,7 @@ public class MusicListener extends ListenerAdapter {
 
             }
 
-            if (e.eq(args[0], DISCONNECT_COMMAND)) {
+            if (e.eq(args[0], Command.DISCONNECT_COMMAND.getCommand())) {
 
                 skipAllTrack(c, false, gld);
                 am.closeAudioConnection();
@@ -174,7 +226,7 @@ public class MusicListener extends ListenerAdapter {
 
             }
 
-            if (e.eq(args[0], QUEUE_COMMAND)) {
+            if (e.eq(args[0], Command.QUEUE_COMMAND.getCommand())) {
 
                 String input = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
@@ -224,7 +276,7 @@ public class MusicListener extends ListenerAdapter {
 
             }
 
-            if (e.eq(args[0], SKIP_COMMAND)) {
+            if (e.eq(args[0], Command.SKIP_COMMAND.getCommand())) {
 
                 if (args.length == 1) {
                     skipTrack(c, true);
@@ -242,7 +294,7 @@ public class MusicListener extends ListenerAdapter {
 
             }
 
-            if (e.eq(args[0], VOLUME_COMMAND)) {
+            if (e.eq(args[0], Command.VOLUME_COMMAND.getCommand())) {
 
                 if (args.length == 1) return;
 
@@ -251,25 +303,25 @@ public class MusicListener extends ListenerAdapter {
 
             }
 
-            if (e.eq(args[0], NOW_PLAYING_COMMAND)) {
+            if (e.eq(args[0], Command.NOW_PLAYING_COMMAND.getCommand())) {
                 sendNowPlaying(c);
             }
 
-            if (e.eq(args[0], SHUFFLE_COMMAND)) {
+            if (e.eq(args[0], Command.SHUFFLE_COMMAND.getCommand())) {
                 GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
                 musicManager.scheduler.shuffle();
 
                 c.sendMessage(SHUFFLED_QUEUE).queue();
             }
 
-            if (e.eq(args[0], REPEAT_COMMAND)) {
+            if (e.eq(args[0], Command.REPEAT_COMMAND.getCommand())) {
                 GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
                 musicManager.scheduler.setRepeating(true);
 
                 c.sendMessage(musicManager.scheduler.isRepeating() ? ENABLED_REPEAT_TRACK : DISABLED_REPEAT_TRACK).queue();
             }
 
-            if (e.eq(args[0], SHOW_LIST_COMMAND)) {
+            if (e.eq(args[0], Command.SHOW_LIST_COMMAND.getCommand())) {
                 GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
                 TrackScheduler scheduler = musicManager.scheduler;
 
@@ -302,7 +354,7 @@ public class MusicListener extends ListenerAdapter {
                 }
             }
 
-            if (e.eq(args[0], SHUTDOWN_COMMAND)) {
+            if (e.eq(args[0], Command.SHUTDOWN_COMMAND.getCommand())) {
                 c.sendMessage(SHUTDOWN_BOT).queue();
                 System.exit(-1);
             }
