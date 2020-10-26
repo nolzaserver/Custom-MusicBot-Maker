@@ -1,14 +1,14 @@
 {
-    "connectCommand": "c",
-    "disconnectCommand": "e",
-    "queueCommand": "p",
-    "skipCommand": "s",
-    "volumeCommand": "vol",
-    "nowPlayingCommand": "np",
-    "shuffleCommand": "sf",
-    "repeatCommand": "rp",
-    "showListCommand": "list",
-    "shutdownCommand": "bye",
+    "connectCommand": ["c", "connect", "들어와", "일로와", "와"],
+    "disconnectCommand": ["e", "exit", "quit", "나가", "가"],
+    "queueCommand": ["p", "play", "q", "queue", "틀어", "켜"],
+    "skipCommand": ["s", "skip", "스킵", "넘겨"],
+    "volumeCommand": ["vol", "volume", "볼륨", "사운드", "소리"],
+    "nowPlayingCommand": ["np", "nowPlaying", "현재", "지금"],
+    "shuffleCommand": ["sf", "shuffle", "섞어", "셔플"],
+    "repeatCommand": ["rp", "repeat", "리피트", "리핏", "반복"],
+    "showListCommand": ["list", "queueList", "큐리스트", "큐", "리스트"],
+    "shutdownCommand": ["bye", "shutdown", "잘가", "꺼져"],
 
     "prefix" : ","
 }
