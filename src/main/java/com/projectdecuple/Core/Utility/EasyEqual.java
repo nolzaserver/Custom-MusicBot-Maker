@@ -1,5 +1,7 @@
 package com.projectdecuple.Core.Utility;
 
+import com.projectdecuple.MusicListener;
+
 public class EasyEqual {
 
     public EasyEqual() {
@@ -15,6 +17,22 @@ public class EasyEqual {
         for (int i = 1; i < obj.length; i++) {
 
             if (obj[0].equalsIgnoreCase(obj[i])) {
+
+                return true;
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+    public boolean eq(String targetObject, String[] objects) {
+
+        for (String object : objects) {
+
+            if (targetObject.equalsIgnoreCase(object)) {
 
                 return true;
 
