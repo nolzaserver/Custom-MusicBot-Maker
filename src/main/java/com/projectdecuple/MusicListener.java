@@ -26,7 +26,9 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.text.html.Option;
 import java.awt.*;
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -165,200 +167,218 @@ public class MusicListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
-        sb = new StringBuffer();
+        try {
 
-        User user = event.getAuthor();
-        Member member = event.getMember();
-        TextChannel c = event.getChannel();
-        Message msg = event.getMessage();
-        Guild gld = event.getGuild();
+            sb = new StringBuffer();
 
-        AudioManager am = gld.getAudioManager();
+            User user = event.getAuthor();
+            Member member = event.getMember();
+            TextChannel c = event.getChannel();
+            Message msg = event.getMessage();
+            Guild gld = event.getGuild();
 
-        if (user.isBot()) return;
+            AudioManager am = gld.getAudioManager();
 
-        String[] args = msg.getContentRaw().substring(1).split(" ");
-        char firstCharacter = msg.getContentRaw().charAt(0);
+            String[] bannedUsers = new OptionReader().getBannedUsers();
+            if (bannedUsers != null && new OptionReader().isEnabledUserBan()) {
 
-        if (firstCharacter == PREFIX) {
-
-            if (member == null) return;
-            if (args.length <= 0) return;
-
-            if (e.eq(args[0], Command.CONNECT_COMMAND.getCommand())) {
-
-                try {
-
-                    VoiceChannel v = Objects.requireNonNull(member.getVoiceState()).getChannel();
-
-                    if (v != null) {
-                        am.setSendingHandler(new AudioSendHandler() {
-                            @Override
-                            public boolean canProvide() {
-                                return false;
-                            }
-
-                            @Nullable
-                            @Override
-                            public ByteBuffer provide20MsAudio() {
-                                return null;
-                            }
-                        });
-
-                        am.openAudioConnection(v);
-                        // TODO : Set Volume
-
-                        c.sendMessage(r(CONNECT_VOICE_CHANNEL, "{voice_channel_name}", v.getName())).queue();
-                        
-                    }
-
-                } catch (NullPointerException e) {
-                    c.sendMessage(CANNOT_CONNECT_VOICE_CHANNEL).queue();
+                for (String bannedUser : bannedUsers) {
+                    if (e.eq(user.getId(), bannedUser)) return;
                 }
 
             }
 
-            if (e.eq(args[0], Command.DISCONNECT_COMMAND.getCommand())) {
-
-                skipAllTrack(c, false, gld);
-                am.closeAudioConnection();
-                c.sendMessage(DISCONNECT_VOICE_CHANNEL).queue();
-
+            if (new OptionReader().isOwnerOnlyMode() && !e.eq(user.getId(), new OptionReader().getOwnerId())) {
+                return;
             }
 
-            if (e.eq(args[0], Command.QUEUE_COMMAND.getCommand())) {
+            if (user.isBot()) return;
 
-                String input = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+            String[] args = msg.getContentRaw().substring(1).split(" ");
+            char firstCharacter = msg.getContentRaw().charAt(0);
 
-                try {
+            if (firstCharacter == PREFIX) {
 
-                    VoiceChannel v = Objects.requireNonNull(member.getVoiceState()).getChannel();
+                if (member == null) return;
+                if (args.length <= 0) return;
 
-                    if (v != null) {
-                        setVolume(c, 20, false);
+                if (e.eq(args[0], Command.CONNECT_COMMAND.getCommand())) {
 
-                        am.setSendingHandler(new AudioSendHandler() {
-                            @Override
-                            public boolean canProvide() {
-                                return false;
-                            }
+                    try {
 
-                            @javax.annotation.Nullable
-                            @Override
-                            public ByteBuffer provide20MsAudio() {
-                                return null;
-                            }
-                        });
+                        VoiceChannel v = Objects.requireNonNull(member.getVoiceState()).getChannel();
 
-                        am.openAudioConnection(v);
-                        
-                        c.sendMessage(r(CONNECT_VOICE_CHANNEL, "{voice_channel_name}", v.getName())).queue();
+                        if (v != null) {
+                            am.setSendingHandler(new AudioSendHandler() {
+                                @Override
+                                public boolean canProvide() {
+                                    return false;
+                                }
+
+                                @Nullable
+                                @Override
+                                public ByteBuffer provide20MsAudio() {
+                                    return null;
+                                }
+                            });
+
+                            am.openAudioConnection(v);
+                            // TODO : Set Volume
+
+                            c.sendMessage(r(CONNECT_VOICE_CHANNEL, "{voice_channel_name}", v.getName())).queue();
+
+                        }
+
+                    } catch (NullPointerException e) {
+                        c.sendMessage(CANNOT_CONNECT_VOICE_CHANNEL).queue();
                     }
-
-                    YoutubeAPI youtube = new YoutubeAPI();
-
-                    String youtubeSearched = youtube.searchYoutube(input);
-
-                    if (youtubeSearched == null) {
-                        c.sendMessage(CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE).queue();
-                        return;
-                    }
-
-                    input = youtubeSearched;
-                    loadAndPlay(event.getChannel(), input, true, member);
-
-
-                } catch (NullPointerException ex) {
-
-                    c.sendMessage(CANNOT_CONNECT_VOICE_CHANNEL).queue();
 
                 }
 
-            }
+                if (e.eq(args[0], Command.DISCONNECT_COMMAND.getCommand())) {
 
-            if (e.eq(args[0], Command.SKIP_COMMAND.getCommand())) {
+                    skipAllTrack(c, false, gld);
+                    am.closeAudioConnection();
+                    c.sendMessage(DISCONNECT_VOICE_CHANNEL).queue();
 
-                if (args.length == 1) {
-                    skipTrack(c, true);
-                } else if (e.eq(args[1], "ALL", "모두", "전체", "전부")) {
-                    skipAllTrack(c, true, gld);
-                } else {
-                    int skipTrack = Integer.parseInt(args[1]);
+                }
 
-                    if (skipTrack < 1 | skipTrack > 10) {
-                        c.sendMessage(OUT_OF_SKIP_TRACKS_RANGE).queue();
+                if (e.eq(args[0], Command.QUEUE_COMMAND.getCommand())) {
+
+                    String input = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+
+                    try {
+
+                        VoiceChannel v = Objects.requireNonNull(member.getVoiceState()).getChannel();
+
+                        if (v != null) {
+                            setVolume(c, 20, false);
+
+                            am.setSendingHandler(new AudioSendHandler() {
+                                @Override
+                                public boolean canProvide() {
+                                    return false;
+                                }
+
+                                @javax.annotation.Nullable
+                                @Override
+                                public ByteBuffer provide20MsAudio() {
+                                    return null;
+                                }
+                            });
+
+                            am.openAudioConnection(v);
+
+                            c.sendMessage(r(CONNECT_VOICE_CHANNEL, "{voice_channel_name}", v.getName())).queue();
+                        }
+
+                        YoutubeAPI youtube = new YoutubeAPI();
+
+                        String youtubeSearched = youtube.searchYoutube(input);
+
+                        if (youtubeSearched == null) {
+                            c.sendMessage(CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE).queue();
+                            return;
+                        }
+
+                        input = youtubeSearched;
+                        loadAndPlay(event.getChannel(), input, true, member);
+
+
+                    } catch (NullPointerException ex) {
+
+                        c.sendMessage(CANNOT_CONNECT_VOICE_CHANNEL).queue();
+
+                    }
+
+                }
+
+                if (e.eq(args[0], Command.SKIP_COMMAND.getCommand())) {
+
+                    if (args.length == 1) {
+                        skipTrack(c, true);
+                    } else if (e.eq(args[1], "ALL", "모두", "전체", "전부")) {
+                        skipAllTrack(c, true, gld);
                     } else {
-                        skipTrack(c, Integer.parseInt(args[1]), true);
-                    }
-                }
+                        int skipTrack = Integer.parseInt(args[1]);
 
-            }
-
-            if (e.eq(args[0], Command.VOLUME_COMMAND.getCommand())) {
-
-                if (args.length == 1) return;
-
-                int vol = Integer.parseInt(args[1]);
-                setVolume(c, vol, true);
-
-            }
-
-            if (e.eq(args[0], Command.NOW_PLAYING_COMMAND.getCommand())) {
-                sendNowPlaying(c);
-            }
-
-            if (e.eq(args[0], Command.SHUFFLE_COMMAND.getCommand())) {
-                GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
-                musicManager.scheduler.shuffle();
-
-                c.sendMessage(SHUFFLED_QUEUE).queue();
-            }
-
-            if (e.eq(args[0], Command.REPEAT_COMMAND.getCommand())) {
-                GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
-                musicManager.scheduler.setRepeating(true);
-
-                c.sendMessage(musicManager.scheduler.isRepeating() ? ENABLED_REPEAT_TRACK : DISABLED_REPEAT_TRACK).queue();
-            }
-
-            if (e.eq(args[0], Command.SHOW_LIST_COMMAND.getCommand())) {
-                GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
-                TrackScheduler scheduler = musicManager.scheduler;
-
-                Queue<AudioInfo> queue = scheduler.queue;
-
-                if (queue.isEmpty()) {
-
-                    c.sendMessage(QUEUE_EMPTY_MESSAGE).queue();
-
-                } else {
-
-                    int trackCount = 0;
-                    long queueLength = 0;
-                    StringBuilder sb = new StringBuilder();
-
-                    sb.append("```md\n# ").append(r(NOW_PLAYING_QUEUE_LIST, "{queue_amount}", String.valueOf(queue.size()))).append("\n\n");
-
-                    for (AudioInfo info : queue) {
-                        queueLength += info.getTrack().getDuration();
-
-                        if (trackCount < 20) {
-                            sb.append(trackCount + 1).append(". ").append(info.getTrack().getInfo().title).append("\n");
-                            trackCount++;
+                        if (skipTrack < 1 | skipTrack > 10) {
+                            c.sendMessage(OUT_OF_SKIP_TRACKS_RANGE).queue();
+                        } else {
+                            skipTrack(c, Integer.parseInt(args[1]), true);
                         }
                     }
 
-                    sb.append("\n전체 재생 길이 : ").append(getTimeStamp(queueLength, true)).append("```");
-                    c.sendMessage(sb.toString()).queue();
+                }
+
+                if (e.eq(args[0], Command.VOLUME_COMMAND.getCommand())) {
+
+                    if (args.length == 1) return;
+
+                    int vol = Integer.parseInt(args[1]);
+                    setVolume(c, vol, true);
 
                 }
-            }
 
-            if (e.eq(args[0], Command.SHUTDOWN_COMMAND.getCommand())) {
-                c.sendMessage(SHUTDOWN_BOT).queue();
-                System.exit(-1);
-            }
+                if (e.eq(args[0], Command.NOW_PLAYING_COMMAND.getCommand())) {
+                    sendNowPlaying(c);
+                }
 
+                if (e.eq(args[0], Command.SHUFFLE_COMMAND.getCommand())) {
+                    GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
+                    musicManager.scheduler.shuffle();
+
+                    c.sendMessage(SHUFFLED_QUEUE).queue();
+                }
+
+                if (e.eq(args[0], Command.REPEAT_COMMAND.getCommand())) {
+                    GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
+                    musicManager.scheduler.setRepeating(true);
+
+                    c.sendMessage(musicManager.scheduler.isRepeating() ? ENABLED_REPEAT_TRACK : DISABLED_REPEAT_TRACK).queue();
+                }
+
+                if (e.eq(args[0], Command.SHOW_LIST_COMMAND.getCommand())) {
+                    GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
+                    TrackScheduler scheduler = musicManager.scheduler;
+
+                    Queue<AudioInfo> queue = scheduler.queue;
+
+                    if (queue.isEmpty()) {
+
+                        c.sendMessage(QUEUE_EMPTY_MESSAGE).queue();
+
+                    } else {
+
+                        int trackCount = 0;
+                        long queueLength = 0;
+                        StringBuilder sb = new StringBuilder();
+
+                        sb.append("```md\n# ").append(r(NOW_PLAYING_QUEUE_LIST, "{queue_amount}", String.valueOf(queue.size()))).append("\n\n");
+
+                        for (AudioInfo info : queue) {
+                            queueLength += info.getTrack().getDuration();
+
+                            if (trackCount < 20) {
+                                sb.append(trackCount + 1).append(". ").append(info.getTrack().getInfo().title).append("\n");
+                                trackCount++;
+                            }
+                        }
+
+                        sb.append("\n전체 재생 길이 : ").append(getTimeStamp(queueLength, true)).append("```");
+                        c.sendMessage(sb.toString()).queue();
+
+                    }
+                }
+
+                if (e.eq(args[0], Command.SHUTDOWN_COMMAND.getCommand())) {
+                    c.sendMessage(SHUTDOWN_BOT).queue();
+                    System.exit(-1);
+                }
+
+            }
+        } catch (StringIndexOutOfBoundsException ex) {
+            // ignore
         }
 
     }
@@ -393,20 +413,29 @@ public class MusicListener extends ListenerAdapter {
                 sb = new StringBuffer();
                 EmbedBuilder eb = new EmbedBuilder();
 
-                eb.setDescription("[" + r(ADDED_MUSIC_IN_QUEUE, 
-                        "{track_title}", audioTrack.getInfo().title,
-                        "{track_channel}", audioTrack.getInfo().author,
-                        "{track_duration}", timeStamp
-                ) + "](" + trackUrl + ")]");
-                eb.setColor(Color.CYAN);
+                if (new OptionReader().isEnabledEmbedMessage()) {
+                    eb.setDescription(r(ADDED_MUSIC_IN_QUEUE,
+                            "{track_title}", audioTrack.getInfo().title,
+                            "{track_channel}", audioTrack.getInfo().author,
+                            "{track_duration}", timeStamp
+                    ) + "(" + trackUrl + ")");
+                    eb.setColor(Color.CYAN);
 
-                YoutubeAPI y = new YoutubeAPI();
-                eb.setImage(y.getThumbnail(trackUrl));
+                    YoutubeAPI y = new YoutubeAPI();
+                    eb.setImage(y.getThumbnail(trackUrl));
 
-                eb.setFooter(user.getUser().getAsTag(), user.getUser().getAvatarUrl());
+                    eb.setFooter(user.getUser().getAsTag(), user.getUser().getAvatarUrl());
 
-                if (showMessage) {
-                    tc.sendMessage(eb.build()).queue();
+                    if (showMessage) {
+                        tc.sendMessage(eb.build()).queue();
+                    }
+                } else {
+                    if (showMessage) {
+                        tc.sendMessage("" + r(ADDED_MUSIC_IN_QUEUE, "{track_title}", audioTrack.getInfo().title,
+                                "{track_channel}", audioTrack.getInfo().author,
+                                "{track_duration}", timeStamp
+                        ) + "(" + trackUrl + ")").queue();
+                    }
                 }
 
                 play(tc.getGuild(), musicManager, audioTrack, user, tc);
@@ -427,20 +456,34 @@ public class MusicListener extends ListenerAdapter {
                 sb = new StringBuffer();
                 EmbedBuilder eb = new EmbedBuilder();
 
-                eb.setDescription("[" + r(ADDED_MUSIC_IN_QUEUE, 
-                        "{track_title}", firstTrack.getInfo().title,
-                        "{track_channel}", firstTrack.getInfo().author,
-                        "{track_duration}", timeStamp
-                ) + "](" + trackUrl + ")]");
-                eb.setColor(Color.CYAN);
+                if (new OptionReader().isEnabledEmbedMessage()) {
 
-                YoutubeAPI y = new YoutubeAPI();
-                eb.setImage(y.getThumbnail(trackUrl));
+                    eb.setDescription(r(ADDED_MUSIC_IN_QUEUE,
+                            "{track_title}", firstTrack.getInfo().title,
+                            "{track_channel}", firstTrack.getInfo().author,
+                            "{track_duration}", timeStamp
+                    ) + "(" + trackUrl + ")");
+                    eb.setColor(Color.CYAN);
 
-                eb.setFooter(user.getUser().getAsTag(), user.getUser().getAvatarUrl());
+                    YoutubeAPI y = new YoutubeAPI();
+                    eb.setImage(y.getThumbnail(trackUrl));
 
-                if (showMessage) {
-                    tc.sendMessage(eb.build()).queue();
+                    eb.setFooter(user.getUser().getAsTag(), user.getUser().getAvatarUrl());
+
+                    if (showMessage) {
+                        tc.sendMessage(eb.build()).queue();
+                    }
+
+                } else {
+
+                    if (showMessage) {
+                        tc.sendMessage(r(ADDED_MUSIC_IN_QUEUE,
+                                "{track_title}", firstTrack.getInfo().title,
+                                "{track_channel}", firstTrack.getInfo().author,
+                                "{track_duration}", timeStamp
+                        ) + "(" + trackUrl + ")").queue();
+                    }
+
                 }
 
                 play(tc.getGuild(), musicManager, firstTrack, user, tc);
@@ -455,7 +498,11 @@ public class MusicListener extends ListenerAdapter {
                     eb.setDescription(CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE);
                     eb.setColor(Color.RED);
 
-                    tc.sendMessage(eb.build()).queue();
+                    if (new OptionReader().isEnabledEmbedMessage()) {
+                        tc.sendMessage(eb.build()).queue();
+                    } else {
+                        tc.sendMessage(CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE).queue();
+                    }
 
                 }
             }
@@ -468,7 +515,11 @@ public class MusicListener extends ListenerAdapter {
                     eb.setDescription(CANNOT_LOAD_TRACK);
                     eb.setColor(Color.RED);
 
-                    tc.sendMessage(eb.build()).queue();
+                    if (new OptionReader().isEnabledEmbedMessage()) {
+                        tc.sendMessage(eb.build()).queue();
+                    } else {
+                        tc.sendMessage(CANNOT_LOAD_TRACK).queue();
+                    }
                 }
             }
         });
@@ -510,7 +561,11 @@ public class MusicListener extends ListenerAdapter {
             eb.setDescription(SKIP_TRACK);
             eb.setColor(Color.CYAN);
 
-            tc.sendMessage(eb.build()).queue();
+            if (new OptionReader().isEnabledEmbedMessage()) {
+                tc.sendMessage(eb.build()).queue();
+            } else {
+                tc.sendMessage(SKIP_TRACK).queue();
+            }
         }
 
     }
@@ -528,7 +583,11 @@ public class MusicListener extends ListenerAdapter {
             eb.setDescription(r(SKIP_TRACKS, String.valueOf(value)));
             eb.setColor(Color.CYAN);
 
-            tc.sendMessage(eb.build()).queue();
+            if (new OptionReader().isEnabledEmbedMessage()) {
+                tc.sendMessage(eb.build()).queue();
+            } else {
+                tc.sendMessage(r(SKIP_TRACKS, String.valueOf(value))).queue();
+            }
         }
 
     }
@@ -551,13 +610,16 @@ public class MusicListener extends ListenerAdapter {
 
             eb.setDescription(SKIP_ALL_TRACKS);
 
-            tc.sendMessage(eb.build()).queue();
+            if (new OptionReader().isEnabledEmbedMessage()) {
+                tc.sendMessage(eb.build()).queue();
+            } else {
+                tc.sendMessage(SKIP_ALL_TRACKS).queue();
+            }
         }
     }
 
     public void setVolume(TextChannel tc, int volume, boolean showMessage) {
         sb = new StringBuffer();
-        
 
         GuildMusicManager musicManager = getGuildAudioPlayer(tc.getGuild());
 
@@ -565,21 +627,28 @@ public class MusicListener extends ListenerAdapter {
         musicManager.scheduler.pl.setVolume(volume);
 
         EmbedBuilder eb = new EmbedBuilder();
+        String message = null;
 
         if (prVol > volume) {
             eb.setColor(Color.ORANGE);
             eb.setTitle(SET_LOWER_VOLUME);
+            message = SET_LOWER_VOLUME;
         } else if (prVol == volume) {
             eb.setColor(Color.YELLOW);
             showMessage = false;
         } else {
             eb.setColor(Color.CYAN);
             eb.setTitle(SET_HIGHER_VOLUME);
+            message = SET_HIGHER_VOLUME;
         }
         eb.setDescription(prVol + " :arrow_forward: " + volume);
 
         if (!showMessage) return;
-        tc.sendMessage(eb.build()).queue();
+
+        if (new OptionReader().isEnabledEmbedMessage()) {
+            tc.sendMessage(eb.build()).queue();
+        } else
+            tc.sendMessage(message + "(" + prVol + " :arrow_forward: " + volume + ")").queue();
     }
 
     public void sendNowPlaying(TextChannel tc) {
@@ -601,13 +670,21 @@ public class MusicListener extends ListenerAdapter {
 
             String timeStamp = r(TIME_STAMP, "{hour}", String.valueOf(hours), "{minitue}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
 
-            eb.setDescription("[" + r(NOW_PLAYING_TRACK_INFO, 
+            eb.setDescription(r(NOW_PLAYING_TRACK_INFO,
                     "{track_title}", audioTrack.getInfo().title,
                     "{track_channel}", audioTrack.getInfo().author,
                     "{track_duration}", timeStamp
-            ) + "](" + af.uri + ")]");
+            ) + "(" + af.uri + ")");
 
-            tc.sendMessage(eb.build()).queue();
+            if (new OptionReader().isEnabledEmbedMessage()) {
+                tc.sendMessage(eb.build()).queue();
+            } else {
+                tc.sendMessage((r(NOW_PLAYING_TRACK_INFO,
+                        "{track_title}", audioTrack.getInfo().title,
+                        "{track_channel}", audioTrack.getInfo().author,
+                        "{track_duration}", timeStamp
+                ) + "(" + af.uri + ")")).queue();
+            }
         } catch (NullPointerException e) {
             tc.sendMessage(NOT_PLAYING_TRACK_MESSAGE).queue();
         }
@@ -634,6 +711,62 @@ public class MusicListener extends ListenerAdapter {
                 break;
             }
         }
+    }
+
+}
+
+class OptionReader {
+
+    static File optionFile = new File(BotBuilder.BASE_DIRECTORY + "/Config/SETTING.json");
+    static JsonParser jp = new JsonParser();
+    static JsonObject obj = (JsonObject) jp.parse(Objects.requireNonNull(new ReadFile().readString(optionFile)));
+
+    public OptionReader() {
+
+    }
+
+    public boolean isAgreedLicense() {
+
+        return optionFile.exists() && obj.get("license_agree").getAsString().equalsIgnoreCase("true");
+
+    }
+
+    public boolean isEnabledEmbedMessage() {
+
+        return obj.get("showEmbedMessage").getAsString().equalsIgnoreCase("true");
+
+    }
+
+    public String getOwnerId() {
+
+        return obj.get("ownerUserId").getAsString();
+
+    }
+
+    public boolean isOwnerOnlyMode() {
+
+        return obj.get("canUseOnlyOwnerUser").getAsString().equalsIgnoreCase("true");
+
+    }
+
+    public boolean isEnabledUserBan() {
+
+        return obj.get("enableUserBan").getAsString().equalsIgnoreCase("true");
+
+    }
+
+    public String[] getBannedUsers() {
+
+        return getter("banList");
+
+    }
+
+    public static String[] getter(String get) {
+
+        return obj.get(get).getClass() == JsonArray.class ?
+                MusicListener.jsonArrayToStrArray(obj.get(get).getAsJsonArray()) :
+                new String[] {obj.get(get).getAsJsonPrimitive().getAsString()};
+
     }
 
 }
