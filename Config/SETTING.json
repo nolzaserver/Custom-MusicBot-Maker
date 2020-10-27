@@ -1,0 +1,13 @@
+{
+
+    "license_agree" : "false",
+
+    "showEmbedMessage" : "true",
+
+    "ownerUserId" : "",
+    "canUseOnlyOwnerUser" : "false",
+
+    "enableUserBan" : "false",
+    "banList" : []
+
+}
