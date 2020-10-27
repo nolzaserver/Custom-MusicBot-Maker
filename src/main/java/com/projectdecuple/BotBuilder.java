@@ -25,6 +25,21 @@ public class BotBuilder {
         System.out.println("Working Directory : " + BASE_DIRECTORY);
         System.out.println("Custom-MusicBot-Maker by '데큐플#9999'. Custom-MusicBot-Maker was written based on the source code of QuintupleV2.");
 
+        if (!new OptionReader().isAgreedLicense()) {
+            System.out.println("\nYou have not yet accepted the licenses.");
+            System.out.println("To use this bot, you need to accept to the licenses.");
+
+            System.out.println(); // LF
+
+            System.out.println("ㅡㅡㅡㅡ How to accept to the licenses ㅡㅡㅡㅡ");
+            System.out.println("1. Open the directory where this bot is located.");
+            System.out.println("2. Open 'Config' folder.");
+            System.out.println("3. Right-click 'SETTING.json'.");
+            System.out.println("4. Click 'Edit'.");
+            System.out.println("5. Modify the setting that says \"false\" in the \"license_agree\" section to \"true\".");
+            return;
+        }
+
         JDABuilder jdaBuilder = JDABuilder.createDefault(BOT_TOKEN)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
