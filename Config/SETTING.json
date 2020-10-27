@@ -1,8 +1,8 @@
 {
 
-    "license_agree" : "false",
+    "license_agree" : "true",
 
-    "showEmbedMessage" : "true",
+    "showEmbedMessage" : "false",
 
     "ownerUserId" : "",
     "canUseOnlyOwnerUser" : "false",
