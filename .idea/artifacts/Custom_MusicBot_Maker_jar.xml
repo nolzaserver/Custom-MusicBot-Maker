@@ -2,6 +2,9 @@
   <artifact type="jar" name="Custom-MusicBot-Maker:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Custom_MusicBot_Maker_jar</output-path>
     <root id="archive" name="Custom-MusicBot-Maker.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
+      </element>
       <element id="module-output" name="Custom-MusicBot-Maker" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/sedmelluq/lavaplayer/1.3.53/lavaplayer-1.3.53.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/apis/google-api-services-youtube/v3-rev222-1.25.0/google-api-services-youtube-v3-rev222-1.25.0.jar" path-in-jar="/" />
