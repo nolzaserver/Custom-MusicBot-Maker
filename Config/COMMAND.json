@@ -8,6 +8,7 @@
     "shuffleCommand": ["sf", "shuffle", "섞어", "셔플"],
     "repeatCommand": ["rp", "repeat", "리피트", "리핏", "반복"],
     "showListCommand": ["list", "queueList", "큐리스트", "큐", "리스트"],
+    "melonCommand" : ["멜론", "멜론차트", "Melon", "MelonChart", "Rank", "순위", "랭크"],
     "shutdownCommand": ["bye", "shutdown", "잘가", "꺼져"],
 
     "prefix" : ","
