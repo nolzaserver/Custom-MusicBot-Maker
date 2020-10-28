@@ -1,57 +1,52 @@
 <component name="ArtifactManager">
-  <artifact name="Custom-MusicBot-Maker:jar">
+  <artifact type="jar" name="Custom-MusicBot-Maker:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Custom_MusicBot_Maker_jar</output-path>
-    <root id="root">
-      <element id="archive" name="Custom-MusicBot-Maker.jar">
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-        </element>
-        <element id="module-output" name="Custom-MusicBot-Maker" />
-      </element>
-      <element id="library" level="project" name="Maven: commons-io:commons-io:2.6" />
-      <element id="library" level="project" name="Maven: org.json:json:20190722" />
-      <element id="library" level="project" name="Maven: com.sedmelluq:lava-common:1.1.0" />
-      <element id="library" level="project" name="Maven: com.squareup.okio:okio:1.14.1" />
-      <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:1.6.1" />
-      <element id="library" level="project" name="Maven: net.java.dev.jna:jna:4.4.0" />
-      <element id="library" level="project" name="Maven: com.squareup.okhttp3:okhttp:3.13.0" />
-      <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.10.3" />
-      <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.5" />
-      <element id="library" level="project" name="Maven: com.google.apis:google-api-services-youtube:v3-rev222-1.25.0" />
-      <element id="library" level="project" name="Maven: com.google.api-client:google-api-client:1.25.0" />
-      <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.0" />
-      <element id="library" level="project" name="Maven: com.github.gikkman:Java-Twirk:0.6.2" />
-      <element id="library" level="project" name="Maven: com.google.oauth-client:google-oauth-client:1.25.0" />
-      <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.5.10" />
-      <element id="library" level="project" name="Maven: club.minnced:opus-java-api:1.0.4" />
-      <element id="library" level="project" name="Maven: com.google.guava:guava:20.0" />
-      <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.25" />
-      <element id="library" level="project" name="Maven: com.google.j2objc:j2objc-annotations:1.1" />
-      <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.1" />
-      <element id="library" level="project" name="Maven: org.python:jython-standalone:2.7.2" />
-      <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.1" />
-      <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:3.0.2" />
-      <element id="library" level="project" name="Maven: com.sedmelluq:lavaplayer:1.3.50" />
-      <element id="library" level="project" name="Maven: org.jetbrains:annotations:16.0.1" />
-      <element id="library" level="project" name="Maven: net.sf.trove4j:trove4j:3.0.3" />
-      <element id="library" level="project" name="Maven: com.typesafe:config:1.3.3" />
-      <element id="library" level="project" name="Maven: com.squareup.retrofit2:converter-gson:2.5.0" />
-      <element id="library" level="project" name="Maven: com.github.mautini:pubg-java-utils:1.0-SNAPSHOT" />
-      <element id="library" level="project" name="Maven: club.minnced:opus-java-natives:1.0.4" />
-      <element id="library" level="project" name="Maven: org.apache.commons:commons-collections4:4.1" />
-      <element id="library" level="project" name="Maven: com.github.taycaldwell:riot-api-java:4.3.0" />
-      <element id="library" level="project" name="Maven: com.github.Bumbleboss:osu_api:1.1" />
-      <element id="library" level="project" name="Maven: com.github.mautini:pubg-java:1.0-SNAPSHOT" />
-      <element id="library" level="project" name="Maven: com.sedmelluq:lavaplayer-natives:1.3.13" />
-      <element id="library" level="project" name="Maven: com.squareup.retrofit2:retrofit:2.5.0" />
-      <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
-      <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.12" />
-      <element id="library" level="project" name="Maven: com.google.http-client:google-http-client:1.25.0" />
-      <element id="library" level="project" name="Maven: net.dv8tion:JDA:4.2.0_208" />
-      <element id="library" level="project" name="Maven: com.neovisionaries:nv-websocket-client:2.10" />
-      <element id="library" level="project" name="Maven: net.iharder:base64:2.3.9" />
-      <element id="library" level="project" name="Maven: com.google.http-client:google-http-client-jackson2:1.25.0" />
-      <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.11" />
+    <root id="archive" name="Custom-MusicBot-Maker.jar">
+      <element id="module-output" name="Custom-MusicBot-Maker" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/sedmelluq/lavaplayer/1.3.53/lavaplayer-1.3.53.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/apis/google-api-services-youtube/v3-rev222-1.25.0/google-api-services-youtube-v3-rev222-1.25.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/squareup/retrofit2/retrofit/2.5.0/retrofit-2.5.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/16.0.1/annotations-16.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/club/minnced/opus-java-natives/1.0.4/opus-java-natives-1.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/python/jython-standalone/2.7.2/jython-standalone-2.7.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/squareup/okio/okio/1.14.1/okio-1.14.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/typesafe/config/1.3.3/config-1.3.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.10.1/jackson-annotations-2.10.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/squareup/okhttp3/okhttp/3.13.0/okhttp-3.13.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/mautini/pubg-java/1.0-SNAPSHOT/pubg-java-1.0-20181229.163403-14.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.10.1/jackson-databind-2.10.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.10.0/jackson-core-2.10.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/taycaldwell/riot-api-java/4.3.0/riot-api-java-4.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/http-client/google-http-client-jackson2/1.25.0/google-http-client-jackson2-1.25.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/sedmelluq/lava-common/1.1.1/lava-common-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jsoup/jsoup/1.10.3/jsoup-1.10.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Gikkman/Java-Twirk/0.6.2/Java-Twirk-0.6.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/java/dev/jna/jna/4.4.0/jna-4.4.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.2/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/sf/trove4j/trove4j/3.0.3/trove4j-3.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/http-client/google-http-client/1.25.0/google-http-client-1.25.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/club/minnced/opus-java-api/1.0.4/opus-java-api-1.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Bumbleboss/osu_api/1.1/osu_api-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpcore/4.4.12/httpcore-4.4.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/guava/guava/20.0/guava-20.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/json/json/20190722/json-20190722.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/squareup/retrofit2/converter-gson/2.5.0/converter-gson-2.5.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.5/gson-2.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/dv8tion/JDA/4.2.0_212/JDA-4.2.0_212.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.11/commons-codec-1.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/neovisionaries/nv-websocket-client/2.10/nv-websocket-client-2.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/iharder/base64/2.3.9/base64-2.3.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.6/commons-io-2.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/oauth-client/google-oauth-client/1.25.0/google-oauth-client-1.25.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/sedmelluq/lavaplayer-natives/1.3.13/lavaplayer-natives-1.3.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-simple/1.6.1/slf4j-simple-1.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/api-client/google-api-client/1.25.0/google-api-client-1.25.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.5.10/httpclient-4.5.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/mautini/pubg-java-utils/1.0-SNAPSHOT/pubg-java-utils-1.0-20181229.163408-14.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
