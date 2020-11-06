@@ -26,7 +26,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.text.html.Option;
 import java.awt.*;
 import java.io.File;
 import java.nio.ByteBuffer;
