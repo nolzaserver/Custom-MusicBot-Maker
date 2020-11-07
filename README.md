@@ -101,6 +101,9 @@ COMMAND.json의 편집 도움말입니다. 원래는 다르게 씌여 있습니�
     "showListCommand": "큐에 등록되어 있는 리스트를 표시해주는 명령어입니다.",
     "shutdownCommand": "봇을 끄는 명령어입니다.",
 
+    "customPlaylistCommand": "커스텀 플레이리스트(재생목록)를 재생하는 명령어입니다.",
+    "listGetterCommand": "커스텀 플레이리스트(재생목록)에 있는 트랙 리스트를 전송하는 명령어입니다.",
+
     "prefix" : "명령어 앞에 붙는 기호입니다. 한 글자만 쓸 수 있습니다."
 }
 ```
@@ -128,6 +131,10 @@ This is editting help of `COMMAND.json`. It will be written differently.
     "repeatCommand": "Repeat a track.",
     "showListCommand": "Send queue list.",
     "shutdownCommand": "Shutdown bot.",
+
+    "customPlaylistCommand": "Play custom playlist tracks.",
+    "listGetterCommand": "Send list of custom playlist tracks.",
+
 
     "prefix" : "This is the symbol that precedes the command. You can only write one letter."
 }
