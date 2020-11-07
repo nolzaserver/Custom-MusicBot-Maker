@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.projectdecuple.Core.DecupleAPI;
 import com.projectdecuple.Core.Music.AudioInfo;
 import com.projectdecuple.Core.Music.GuildMusicManager;
 import com.projectdecuple.Core.Music.TrackScheduler;
@@ -59,6 +60,8 @@ public class MusicListener extends ListenerAdapter {
     public String NOW_PLAYING_QUEUE_LIST = message.get("nowPlayingQueue").getAsString();
     public String SHUTDOWN_BOT = message.get("shutdownBot").getAsString();
     public String TIME_STAMP = message.get("timeStamp").getAsString();
+    public String PLAY_PLAYLISTS = message.get("playPlaylist").getAsString();
+    public String SEND_PLAYLISTS_INFORMATION = message.get("sendPlaylistInfo").getAsString();
 
     /* Before v1.2.0
     public String CONNECT_COMMAND = command.get("connectCommand").getAsString();
@@ -84,7 +87,9 @@ public class MusicListener extends ListenerAdapter {
         SHUFFLE_COMMAND(cmdGetter("shuffleCommand")),
         REPEAT_COMMAND(cmdGetter("repeatCommand")),
         SHOW_LIST_COMMAND(cmdGetter("showListCommand")),
-        SHUTDOWN_COMMAND(cmdGetter("shutdownCommand"));
+        SHUTDOWN_COMMAND(cmdGetter("shutdownCommand")),
+        PLAYLISTS_COMMAND(cmdGetter("customPlaylistCommand")),
+        SHOW_PLAYLISTS_COMMAND(cmdGetter("listGetterCommand"));
 
         private final String[] command;
 
@@ -370,6 +375,50 @@ public class MusicListener extends ListenerAdapter {
                     }
                 }
 
+                if (e.eq(args[0], Command.PLAYLISTS_COMMAND.getCommand())) {
+
+                    if (args.length == 1) {
+
+                        String[] urlLists = new DecupleAPI().getPlaylistElements(user);
+
+                        for (String url : urlLists) {
+                            loadAndPlay(c, url, false, member);
+                        }
+
+                        c.sendMessage(PLAY_PLAYLISTS.replace("{user}", user.getAsTag()).replace("{queue_amount}", String.valueOf(urlLists.length))).queue();
+                        return;
+
+                    }
+
+                    if (e.eq(args[1], Command.SHOW_PLAYLISTS_COMMAND.getCommand())) {
+
+                        StringBuilder sb = new StringBuilder("```md\n");
+                        sb.append(SEND_PLAYLISTS_INFORMATION.replace("{user}", user.getAsTag()));
+
+                        String[] urlLists = new DecupleAPI().getPlaylistElements(user);
+
+                        for (int i = 0; i < urlLists.length; i++) {
+                            sb.append("\n")
+                                    .append(i)
+                                    .append(". [")
+                                    .append(new YoutubeAPI().getTitle(urlLists[i])
+                                            .replace("[", "{")
+                                            .replace("]", "}")
+                                            .replace("_", "-")
+                                            .replace("*", "-"))
+                                    .append("](").append(urlLists[i]).append(urlLists[i].contains("_") ? ")" : ")");
+
+                            if (sb.toString().length() > 1800) {
+                                c.sendMessage(sb.append("```").toString()).queue();
+                                sb = new StringBuilder("```md\n");
+                            }
+                        }
+
+                        c.sendMessage(sb.append("```").toString()).queue();
+
+                    }
+                }
+
                 if (e.eq(args[0], Command.SHUTDOWN_COMMAND.getCommand())) {
                     c.sendMessage(SHUTDOWN_BOT).queue();
                     System.exit(-1);
@@ -378,6 +427,8 @@ public class MusicListener extends ListenerAdapter {
             }
         } catch (StringIndexOutOfBoundsException ex) {
             // ignore
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
     }
