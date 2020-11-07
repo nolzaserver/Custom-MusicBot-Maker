@@ -135,7 +135,6 @@ This is editting help of `COMMAND.json`. It will be written differently.
     "customPlaylistCommand": "Play custom playlist tracks.",
     "listGetterCommand": "Send list of custom playlist tracks.",
 
-
     "prefix" : "This is the symbol that precedes the command. You can only write one letter."
 }
 ```
