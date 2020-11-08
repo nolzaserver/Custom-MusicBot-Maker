@@ -1,6 +1,7 @@
 {
 
     "license_agree" : "false",
+    "auto_update": "true",
 
     "showEmbedMessage" : "true",
 
