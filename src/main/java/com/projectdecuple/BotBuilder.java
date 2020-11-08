@@ -30,7 +30,7 @@ public class BotBuilder {
     public final static String YOU_OAUTH = r.readString(BASE_DIRECTORY + "/YOUTUBE_API_KEY.txt");
 
     public final static String ACTIVITY = r.readString(BASE_DIRECTORY + "/Config/ACTIVITY.txt");
-    public final static String NOW_VERSION = "v1.2.1";
+    public final static String NOW_VERSION = "v1.2.3";
 
     public static void main(String[] args) throws Exception {
 
