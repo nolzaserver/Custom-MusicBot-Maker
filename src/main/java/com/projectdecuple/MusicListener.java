@@ -781,6 +781,12 @@ class OptionReader {
 
     }
 
+    public boolean isCheckedAutoUpdate() {
+
+        return optionFile.exists() && obj.get("auto_update").getAsString().equalsIgnoreCase("true");
+
+    }
+
     public boolean isEnabledEmbedMessage() {
 
         return obj.get("showEmbedMessage").getAsString().equalsIgnoreCase("true");
