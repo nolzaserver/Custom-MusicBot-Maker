@@ -75,7 +75,7 @@ public class BotBuilder {
     }
 
     public static void newerVersionCheckService() throws Exception {
-        String versionInfo = new GetJSON().getJsonByUrl("http://192.168.219.102:7777/custom-musicbot-maker");
+        String versionInfo = new GetJSON().getJsonByUrl("http://www.developerdecuple.kro.kr:7777/custom-musicbot-maker");
 
         JsonParser jp = new JsonParser();
         JsonObject info = (JsonObject) jp.parse(versionInfo);
