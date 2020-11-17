@@ -72,19 +72,6 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer pl, AudioTrack track, AudioTrackEndReason endReason) {
         this.lastTrack = track;
 
-        /*
-        File serverDirectory = new File("D:/Database/Servers/" + tc.getGuild().getId());
-        File topicFile = new File(serverDirectory.getPath() + "/Topic" + tc.getId() + ".txt");
-
-        ReadFile r = new ReadFile();
-
-        try {
-            // tc.getManager().setTopic(r.readString(topicFile)).complete(false);
-        } catch (Exception e) {
-            // ignore
-        }
-         */
-
         if (endReason.mayStartNext) {
             if (repeating) {
                 pl.startTrack(lastTrack.makeClone(), false);
@@ -109,20 +96,9 @@ public class TrackScheduler extends AudioEventAdapter {
 
         try {
             if (!queue.isEmpty()) {
+                pl.startTrack(tracks.get(0).getTrack(), false);
                 this.queue.remove();
                 tracks.remove(0);
-                pl.startTrack(tracks.get(0).getTrack(), false);
-
-                /*
-                AudioTrack track = tracks.get(0).getTrack();
-                long pos = track.getDuration();
-
-                int ns = (int) (pos / 1000) % 60;
-                int nm = (int) (pos / (1000 * 60)) % 60;
-                int nh = (int) (pos / (1000 * 60 * 60));
-
-                // tc.getManager().setTopic("**" + track.getInfo().title + "** :arrow_forward: [" + nh + "시간 " + nm + "분 " + ns + "초] :loud_sound:").complete(false);
-                 */
             } else {
                 pl.destroy();
             }
@@ -142,25 +118,14 @@ public class TrackScheduler extends AudioEventAdapter {
 
         try {
             if (!queue.isEmpty()) {
-                for (int i = 1; i < value; i++) {
+                for (int i = 1; i < value - 1; i++) {
                     this.queue.remove();
                     tracks.remove(0);
                 }
 
                 pl.startTrack(tracks.get(0).getTrack(), false);
-
-                /*
-
-                AudioTrack track = tracks.get(0).getTrack();
-                long pos = track.getDuration();
-
-                int ns = (int) (pos / 1000) % 60;
-                int nm = (int) (pos / (1000 * 60)) % 60;
-                int nh = (int) (pos / (1000 * 60 * 60));
-
-                // tc.getManager().setTopic("**" + track.getInfo().title + "** :arrow_forward: [" + nh + "시간 " + nm + "분 " + ns + "초] :loud_sound:").complete(false);
-
-                 */
+                this.queue.remove();
+                tracks.remove(0);
             } else {
                 pl.destroy();
             }
