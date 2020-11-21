@@ -25,6 +25,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
@@ -38,6 +39,7 @@ public class MusicListener extends ListenerAdapter {
     private static final JsonObject message = (JsonObject) jsonParser.parse(Objects.requireNonNull(new ReadFile().readString(BotBuilder.BASE_DIRECTORY + "/Config/MESSAGE.json")));
     private static final JsonObject command = (JsonObject) jsonParser.parse(Objects.requireNonNull(new ReadFile().readString(BotBuilder.BASE_DIRECTORY + "/Config/COMMAND.json")));
 
+    /* Before v1.2.4.1
     public String CONNECT_VOICE_CHANNEL = message.get("connectVoiceChannel").getAsString();
     public String DISCONNECT_VOICE_CHANNEL = message.get("disconnectVoiceChannel").getAsString();
     public String CANNOT_CONNECT_VOICE_CHANNEL = message.get("cannotConnectVoiceChannel").getAsString();
@@ -62,6 +64,7 @@ public class MusicListener extends ListenerAdapter {
     public String TIME_STAMP = message.get("timeStamp").getAsString();
     public String PLAY_PLAYLISTS = message.get("playPlaylist").getAsString();
     public String SEND_PLAYLISTS_INFORMATION = message.get("sendPlaylistInfo").getAsString();
+     */
 
     /* Before v1.2.0
     public String CONNECT_COMMAND = command.get("connectCommand").getAsString();
@@ -89,7 +92,8 @@ public class MusicListener extends ListenerAdapter {
         SHOW_LIST_COMMAND(cmdGetter("showListCommand")),
         SHUTDOWN_COMMAND(cmdGetter("shutdownCommand")),
         PLAYLISTS_COMMAND(cmdGetter("customPlaylistCommand")),
-        SHOW_PLAYLISTS_COMMAND(cmdGetter("listGetterCommand"));
+        SHOW_PLAYLISTS_COMMAND(cmdGetter("listGetterCommand")),
+        PAUSE_COMMAND(cmdGetter("pauseCommand"));
 
         private final String[] command;
 
@@ -101,6 +105,41 @@ public class MusicListener extends ListenerAdapter {
             return command;
         }
 
+    }
+    
+    public enum Message {
+        
+        CONNECT_VOICE_CHANNEL(msgGetter("connectVoiceChannel")),
+        DISCONNECT_VOICE_CHANNEL(msgGetter("disconnectVoiceChannel")),
+        CANNOT_CONNECT_VOICE_CHANNEL(msgGetter("cannotConnectVoiceChannel")),
+        ADDED_MUSIC_IN_QUEUE(msgGetter("addedMusicInQueue")),
+        CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE(msgGetter("cannotFindSearchResultsInYoutube")),
+        CANNOT_LOAD_TRACK(msgGetter("cannotLoadTrack")),
+        SKIP_TRACK(msgGetter("skipTrack")),
+        SKIP_TRACKS(msgGetter("skipTracks")),
+        SKIP_ALL_TRACKS(msgGetter("skipAllTracks")),
+        OUT_OF_SKIP_TRACKS_RANGE(msgGetter("outOfSkipTracksRange")),
+        SET_LOWER_VOLUME(msgGetter("setLowerVolume")),
+        SET_HIGHER_VOLUME(msgGetter("setHigherVolume")),
+        NOW_PLAYING_TRACK_INFO(msgGetter("nowPlayingTrackInfo")),
+        NOT_PLAYING_TRACK_MESSAGE(msgGetter("notPlayingTrackMessage")),
+        // OUT_OF_CHART_MESSAGE(msgGetter("outOfChartMessage")),
+        SHUFFLED_QUEUE(msgGetter("shuffledQueue")),
+        ENABLED_REPEAT_TRACK(msgGetter("enabledRepeatTrack")),
+        DISABLED_REPEAT_TRACK(msgGetter("disabledRepeatTrack")),
+        QUEUE_EMPTY_MESSAGE(msgGetter("queueEmptyMessage")),
+        NOW_PLAYING_QUEUE(msgGetter("nowPlayingQueue")),
+        SHUTDOWN_BOT(msgGetter("shutdownBot")),
+        PLAY_PLAYLIST(msgGetter("playPlaylist")),
+        SEND_PLAYLIST_INFO(msgGetter("sendPlaylistInfo")),
+        ENABLE_PAUSE(msgGetter("enablePause")),
+        DISABLE_PAUSE(msgGetter("disablePause")),
+        TIME_STAMP(msgGetter("timeStamp"));
+        
+        private final String message;
+        Message(String message) { this.message = message; }
+        String getMessage() { return message; }
+        
     }
 
     public char PREFIX = command.get("prefix").getAsString().charAt(0);
@@ -131,6 +170,12 @@ public class MusicListener extends ListenerAdapter {
                 jsonArrayToStrArray(command.get(get).getAsJsonArray()) :
                 new String[] {command.get(get).getAsJsonPrimitive().getAsString()};
 
+    }
+    
+    public static String msgGetter(String get) {
+        
+        return message.get(get).getAsString();
+        
     }
 
     public String r(String str, String ... rp) {
@@ -169,7 +214,7 @@ public class MusicListener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 
         try {
 
@@ -178,7 +223,7 @@ public class MusicListener extends ListenerAdapter {
             User user = event.getAuthor();
             Member member = event.getMember();
             TextChannel c = event.getChannel();
-            Message msg = event.getMessage();
+            net.dv8tion.jda.api.entities.Message msg = event.getMessage();
             Guild gld = event.getGuild();
 
             AudioManager am = gld.getAudioManager();
@@ -229,12 +274,12 @@ public class MusicListener extends ListenerAdapter {
                             am.openAudioConnection(v);
                             // TODO : Set Volume
 
-                            c.sendMessage(r(CONNECT_VOICE_CHANNEL, "{voice_channel_name}", v.getName())).queue();
+                            c.sendMessage(r(Message.CONNECT_VOICE_CHANNEL.getMessage(), "{voice_channel_name}", v.getName())).queue();
 
                         }
 
                     } catch (NullPointerException e) {
-                        c.sendMessage(CANNOT_CONNECT_VOICE_CHANNEL).queue();
+                        c.sendMessage(Message.CANNOT_CONNECT_VOICE_CHANNEL.getMessage()).queue();
                     }
 
                 }
@@ -243,7 +288,7 @@ public class MusicListener extends ListenerAdapter {
 
                     skipAllTrack(c, false, gld);
                     am.closeAudioConnection();
-                    c.sendMessage(DISCONNECT_VOICE_CHANNEL).queue();
+                    c.sendMessage(Message.DISCONNECT_VOICE_CHANNEL.getMessage()).queue();
 
                 }
 
@@ -273,7 +318,7 @@ public class MusicListener extends ListenerAdapter {
 
                             am.openAudioConnection(v);
 
-                            c.sendMessage(r(CONNECT_VOICE_CHANNEL, "{voice_channel_name}", v.getName())).queue();
+                            c.sendMessage(r(Message.CONNECT_VOICE_CHANNEL.getMessage(), "{voice_channel_name}", v.getName())).queue();
                         }
 
                         YoutubeAPI youtube = new YoutubeAPI();
@@ -281,7 +326,7 @@ public class MusicListener extends ListenerAdapter {
                         String youtubeSearched = youtube.searchYoutube(input);
 
                         if (youtubeSearched == null) {
-                            c.sendMessage(CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE).queue();
+                            c.sendMessage(Message.CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE.getMessage()).queue();
                             return;
                         }
 
@@ -291,7 +336,7 @@ public class MusicListener extends ListenerAdapter {
 
                     } catch (NullPointerException ex) {
 
-                        c.sendMessage(CANNOT_CONNECT_VOICE_CHANNEL).queue();
+                        c.sendMessage(Message.CANNOT_CONNECT_VOICE_CHANNEL.getMessage()).queue();
 
                     }
 
@@ -307,7 +352,7 @@ public class MusicListener extends ListenerAdapter {
                         int skipTrack = Integer.parseInt(args[1]);
 
                         if (skipTrack < 1 | skipTrack > 10) {
-                            c.sendMessage(OUT_OF_SKIP_TRACKS_RANGE).queue();
+                            c.sendMessage(Message.OUT_OF_SKIP_TRACKS_RANGE.getMessage()).queue();
                         } else {
                             skipTrack(c, Integer.parseInt(args[1]), true);
                         }
@@ -332,14 +377,14 @@ public class MusicListener extends ListenerAdapter {
                     GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
                     musicManager.scheduler.shuffle();
 
-                    c.sendMessage(SHUFFLED_QUEUE).queue();
+                    c.sendMessage(Message.SHUFFLED_QUEUE.getMessage()).queue();
                 }
 
                 if (e.eq(args[0], Command.REPEAT_COMMAND.getCommand())) {
                     GuildMusicManager musicManager = getGuildAudioPlayer(c.getGuild());
                     musicManager.scheduler.setRepeating(true);
 
-                    c.sendMessage(musicManager.scheduler.isRepeating() ? ENABLED_REPEAT_TRACK : DISABLED_REPEAT_TRACK).queue();
+                    c.sendMessage(musicManager.scheduler.isRepeating() ? Message.ENABLED_REPEAT_TRACK.getMessage() : Message.DISABLED_REPEAT_TRACK.getMessage()).queue();
                 }
 
                 if (e.eq(args[0], Command.SHOW_LIST_COMMAND.getCommand())) {
@@ -350,7 +395,7 @@ public class MusicListener extends ListenerAdapter {
 
                     if (queue.isEmpty()) {
 
-                        c.sendMessage(QUEUE_EMPTY_MESSAGE).queue();
+                        c.sendMessage(Message.QUEUE_EMPTY_MESSAGE.getMessage()).queue();
 
                     } else {
 
@@ -358,7 +403,7 @@ public class MusicListener extends ListenerAdapter {
                         long queueLength = 0;
                         StringBuilder sb = new StringBuilder();
 
-                        sb.append("```md\n# ").append(r(NOW_PLAYING_QUEUE_LIST, "{queue_amount}", String.valueOf(queue.size()))).append("\n\n");
+                        sb.append("```md\n# ").append(r(Message.NOW_PLAYING_QUEUE.getMessage(), "{queue_amount}", String.valueOf(queue.size()))).append("\n\n");
 
                         for (AudioInfo info : queue) {
                             queueLength += info.getTrack().getDuration();
@@ -385,7 +430,7 @@ public class MusicListener extends ListenerAdapter {
                             loadAndPlay(c, url, false, member);
                         }
 
-                        c.sendMessage(PLAY_PLAYLISTS.replace("{user}", user.getAsTag()).replace("{queue_amount}", String.valueOf(urlLists.length))).queue();
+                        c.sendMessage(Message.PLAY_PLAYLIST.getMessage().replace("{user}", user.getAsTag()).replace("{queue_amount}", String.valueOf(urlLists.length))).queue();
                         return;
 
                     }
@@ -393,7 +438,7 @@ public class MusicListener extends ListenerAdapter {
                     if (e.eq(args[1], Command.SHOW_PLAYLISTS_COMMAND.getCommand())) {
 
                         StringBuilder sb = new StringBuilder("```md\n");
-                        sb.append(SEND_PLAYLISTS_INFORMATION.replace("{user}", user.getAsTag()));
+                        sb.append(Message.SEND_PLAYLIST_INFO.getMessage().replace("{user}", user.getAsTag()));
 
                         String[] urlLists = new DecupleAPI().getPlaylistElements(user);
 
@@ -419,8 +464,26 @@ public class MusicListener extends ListenerAdapter {
                     }
                 }
 
+                if (e.eq(args[0], Command.PAUSE_COMMAND.getCommand())) {
+                    GuildMusicManager manager = getGuildAudioPlayer(event.getGuild());
+                    boolean result = !manager.pl.isPaused();
+
+                    manager.pl.setPaused(result);
+
+                    EmbedBuilder eb = new EmbedBuilder();
+
+                    eb.setDescription(result ? Message.ENABLE_PAUSE.getMessage() : Message.DISABLE_PAUSE.getMessage());
+                    eb.setColor(result ? Color.ORANGE : Color.GREEN);
+
+                    if (new OptionReader().isEnabledEmbedMessage()) {
+                        c.sendMessage(result ? Message.ENABLE_PAUSE.getMessage() : Message.DISABLE_PAUSE.getMessage()).queue();
+                    } else {
+                        c.sendMessage(eb.build()).queue();
+                    }
+                }
+
                 if (e.eq(args[0], Command.SHUTDOWN_COMMAND.getCommand())) {
-                    c.sendMessage(SHUTDOWN_BOT).queue();
+                    c.sendMessage(Message.SHUTDOWN_BOT.getMessage()).queue();
                     System.exit(-1);
                 }
 
@@ -459,12 +522,13 @@ public class MusicListener extends ListenerAdapter {
                 int minutes = (int) ((af / (1000 * 60)) % 60);
                 int hours = (int) ((af / (1000 * 60 * 60)));
                 
-                String timeStamp = r(TIME_STAMP, "{hour}", String.valueOf(hours), "{minitue}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
+                String timeStamp = r(Message.TIME_STAMP.getMessage(),
+                        "{hour}", String.valueOf(hours), "{minute}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
                 sb = new StringBuffer();
                 EmbedBuilder eb = new EmbedBuilder();
 
                 if (new OptionReader().isEnabledEmbedMessage()) {
-                    eb.setDescription(r(ADDED_MUSIC_IN_QUEUE,
+                    eb.setDescription(r(Message.ADDED_MUSIC_IN_QUEUE.getMessage(),
                             "{track_title}", audioTrack.getInfo().title,
                             "{track_channel}", audioTrack.getInfo().author,
                             "{track_duration}", timeStamp
@@ -481,7 +545,8 @@ public class MusicListener extends ListenerAdapter {
                     }
                 } else {
                     if (showMessage) {
-                        tc.sendMessage("" + r(ADDED_MUSIC_IN_QUEUE, "{track_title}", audioTrack.getInfo().title,
+                        tc.sendMessage("" + r(Message.ADDED_MUSIC_IN_QUEUE.getMessage(),
+                                "{track_title}", audioTrack.getInfo().title,
                                 "{track_channel}", audioTrack.getInfo().author,
                                 "{track_duration}", timeStamp
                         ) + "(" + trackUrl + ")").queue();
@@ -502,13 +567,14 @@ public class MusicListener extends ListenerAdapter {
                 int minutes = (int) ((af / (1000 * 60)) % 60);
                 int hours = (int) ((af / (1000 * 60 * 60)));
 
-                String timeStamp = r(TIME_STAMP, "{hour}", String.valueOf(hours), "{minitue}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
+                String timeStamp = r(Message.TIME_STAMP.getMessage(),
+                        "{hour}", String.valueOf(hours), "{minitue}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
                 sb = new StringBuffer();
                 EmbedBuilder eb = new EmbedBuilder();
 
                 if (new OptionReader().isEnabledEmbedMessage()) {
 
-                    eb.setDescription(r(ADDED_MUSIC_IN_QUEUE,
+                    eb.setDescription(r(Message.ADDED_MUSIC_IN_QUEUE.getMessage(),
                             "{track_title}", firstTrack.getInfo().title,
                             "{track_channel}", firstTrack.getInfo().author,
                             "{track_duration}", timeStamp
@@ -527,7 +593,7 @@ public class MusicListener extends ListenerAdapter {
                 } else {
 
                     if (showMessage) {
-                        tc.sendMessage(r(ADDED_MUSIC_IN_QUEUE,
+                        tc.sendMessage(r(Message.ADDED_MUSIC_IN_QUEUE.getMessage(),
                                 "{track_title}", firstTrack.getInfo().title,
                                 "{track_channel}", firstTrack.getInfo().author,
                                 "{track_duration}", timeStamp
@@ -545,13 +611,13 @@ public class MusicListener extends ListenerAdapter {
 
                 if (showMessage) {
 
-                    eb.setDescription(CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE);
+                    eb.setDescription(Message.CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE.getMessage());
                     eb.setColor(Color.RED);
 
                     if (new OptionReader().isEnabledEmbedMessage()) {
                         tc.sendMessage(eb.build()).queue();
                     } else {
-                        tc.sendMessage(CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE).queue();
+                        tc.sendMessage(Message.CANNOT_FIND_SEARCH_RESULTS_IN_YOUTUBE.getMessage()).queue();
                     }
 
                 }
@@ -562,13 +628,13 @@ public class MusicListener extends ListenerAdapter {
                 EmbedBuilder eb = new EmbedBuilder();
 
                 if (showMessage) {
-                    eb.setDescription(CANNOT_LOAD_TRACK);
+                    eb.setDescription(Message.CANNOT_LOAD_TRACK.getMessage());
                     eb.setColor(Color.RED);
 
                     if (new OptionReader().isEnabledEmbedMessage()) {
                         tc.sendMessage(eb.build()).queue();
                     } else {
-                        tc.sendMessage(CANNOT_LOAD_TRACK).queue();
+                        tc.sendMessage(Message.CANNOT_LOAD_TRACK.getMessage()).queue();
                     }
                 }
             }
@@ -608,13 +674,13 @@ public class MusicListener extends ListenerAdapter {
         if (showMessage) {
             EmbedBuilder eb = new EmbedBuilder();
 
-            eb.setDescription(SKIP_TRACK);
+            eb.setDescription(Message.SKIP_TRACKS.getMessage());
             eb.setColor(Color.CYAN);
 
             if (new OptionReader().isEnabledEmbedMessage()) {
                 tc.sendMessage(eb.build()).queue();
             } else {
-                tc.sendMessage(SKIP_TRACK).queue();
+                tc.sendMessage(Message.SKIP_TRACK.getMessage()).queue();
             }
         }
 
@@ -630,13 +696,13 @@ public class MusicListener extends ListenerAdapter {
         if (showMessage) {
             EmbedBuilder eb = new EmbedBuilder();
 
-            eb.setDescription(r(SKIP_TRACKS, String.valueOf(value)));
+            eb.setDescription(r(Message.SKIP_TRACKS.getMessage(), String.valueOf(value)));
             eb.setColor(Color.CYAN);
 
             if (new OptionReader().isEnabledEmbedMessage()) {
                 tc.sendMessage(eb.build()).queue();
             } else {
-                tc.sendMessage(r(SKIP_TRACKS, String.valueOf(value))).queue();
+                tc.sendMessage(r(Message.SKIP_TRACKS.getMessage(), String.valueOf(value))).queue();
             }
         }
 
@@ -658,12 +724,12 @@ public class MusicListener extends ListenerAdapter {
         if (showMessage) {
             EmbedBuilder eb = new EmbedBuilder();
 
-            eb.setDescription(SKIP_ALL_TRACKS);
+            eb.setDescription(Message.SKIP_ALL_TRACKS.getMessage());
 
             if (new OptionReader().isEnabledEmbedMessage()) {
                 tc.sendMessage(eb.build()).queue();
             } else {
-                tc.sendMessage(SKIP_ALL_TRACKS).queue();
+                tc.sendMessage(Message.SKIP_ALL_TRACKS.getMessage()).queue();
             }
         }
     }
@@ -681,15 +747,15 @@ public class MusicListener extends ListenerAdapter {
 
         if (prVol > volume) {
             eb.setColor(Color.ORANGE);
-            eb.setTitle(SET_LOWER_VOLUME);
-            message = SET_LOWER_VOLUME;
+            eb.setTitle(Message.SET_LOWER_VOLUME.getMessage());
+            message = Message.SET_LOWER_VOLUME.getMessage();
         } else if (prVol == volume) {
             eb.setColor(Color.YELLOW);
             showMessage = false;
         } else {
             eb.setColor(Color.CYAN);
-            eb.setTitle(SET_HIGHER_VOLUME);
-            message = SET_HIGHER_VOLUME;
+            eb.setTitle(Message.SET_HIGHER_VOLUME.getMessage());
+            message = Message.SET_HIGHER_VOLUME.getMessage();
         }
         eb.setDescription(prVol + " :arrow_forward: " + volume);
 
@@ -718,9 +784,10 @@ public class MusicListener extends ListenerAdapter {
             int minutes = (int) ((as / (1000 * 60)) % 60);
             int hours = (int) ((as / (1000 * 60 * 60)));
 
-            String timeStamp = r(TIME_STAMP, "{hour}", String.valueOf(hours), "{minitue}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
+            String timeStamp = r(Message.TIME_STAMP.getMessage(),
+                    "{hour}", String.valueOf(hours), "{minute}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
 
-            eb.setDescription(r(NOW_PLAYING_TRACK_INFO,
+            eb.setDescription(r(Message.NOW_PLAYING_TRACK_INFO.getMessage(),
                     "{track_title}", audioTrack.getInfo().title,
                     "{track_channel}", audioTrack.getInfo().author,
                     "{track_duration}", timeStamp
@@ -729,14 +796,14 @@ public class MusicListener extends ListenerAdapter {
             if (new OptionReader().isEnabledEmbedMessage()) {
                 tc.sendMessage(eb.build()).queue();
             } else {
-                tc.sendMessage((r(NOW_PLAYING_TRACK_INFO,
+                tc.sendMessage((r(Message.NOW_PLAYING_TRACK_INFO.getMessage(),
                         "{track_title}", audioTrack.getInfo().title,
                         "{track_channel}", audioTrack.getInfo().author,
                         "{track_duration}", timeStamp
                 ) + "(" + af.uri + ")")).queue();
             }
         } catch (NullPointerException e) {
-            tc.sendMessage(NOT_PLAYING_TRACK_MESSAGE).queue();
+            tc.sendMessage(Message.NOT_PLAYING_TRACK_MESSAGE.getMessage()).queue();
         }
     }
 
