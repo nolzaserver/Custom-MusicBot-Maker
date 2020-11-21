@@ -90,19 +90,21 @@ MESSAGE.json은 자유로이 수정할 수 있습니다. 하지만 `{track_title
 COMMAND.json의 편집 도움말입니다. 원래는 다르게 씌여 있습니다.
 ```json
 {
-    "connectCommand": "보이스 채널에 접속하는 명령어입니다.",
-    "disconnectCommand": "보이스 채널에서 연결을 끊는 명령어입니다.",
-    "queueCommand": "음악을 추가하고 재생하는 명령어입니다.",
-    "skipCommand": "음악을 스킵하는 명령어입니다.",
-    "volumeCommand": "볼륨을 조정하는 명령어입니다.",
-    "nowPlayingCommand": "현재 재생 중인 곡을 표시해주는 명령어입니다.",
-    "shuffleCommand": "셔플 명령어입니다.",
-    "repeatCommand": "반복 명령어입니다.",
-    "showListCommand": "큐에 등록되어 있는 리스트를 표시해주는 명령어입니다.",
-    "shutdownCommand": "봇을 끄는 명령어입니다.",
+    "connectCommand": ["보이스 채널에 접속하는 명령어입니다."],
+    "disconnectCommand": ["보이스 채널에서 연결을 끊는 명령어입니다."],
+    "queueCommand": ["음악을 추가하고 재생하는 명령어입니다."],
+    "skipCommand": ["음악을 스킵하는 명령어입니다."],
+    "volumeCommand": ["볼륨을 조정하는 명령어입니다."],
+    "nowPlayingCommand": ["현재 재생 중인 곡을 표시해주는 명령어입니다."],
+    "shuffleCommand": ["셔플 명령어입니다."],
+    "repeatCommand": ["반복 명령어입니다."],
+    "showListCommand": ["큐에 등록되어 있는 리스트를 표시해주는 명령어입니다."],
+    "melonCommand": ["멜론 차트를 재생하는 명령어입니다."],
+    "pauseCommand": ["음악을 일시정지하는 명령어입니다."],
+    "shutdownCommand": ["봇을 끄는 명령어입니다."],
 
-    "customPlaylistCommand": "커스텀 플레이리스트(재생목록)를 재생하는 명령어입니다.",
-    "listGetterCommand": "커스텀 플레이리스트(재생목록)에 있는 트랙 리스트를 전송하는 명령어입니다.",
+    "customPlaylistCommand": ["커스텀 플레이리스트(퀸튜플 재생목록)를 재생하는 명령어입니다."],
+    "listGetterCommand": ["커스텀 플레이리스트(퀸튜플 재생목록)에 있는 트랙 리스트를 전송하는 명령어입니다."],
 
     "prefix" : "명령어 앞에 붙는 기호입니다. 한 글자만 쓸 수 있습니다."
 }
@@ -121,19 +123,21 @@ You can customize messages of this repository. Don't edit things like `{track_ti
 This is editting help of `COMMAND.json`. It will be written differently.
 ```json
 {
-    "connectCommand": "Connect to voice channel.",
-    "disconnectCommand": "Disconnect from voice channel.",
-    "queueCommand": "Add a music into queue.",
-    "skipCommand": "Skip track(s).",
-    "volumeCommand": "Adjusment volume.",
-    "nowPlayingCommand": "Send now playing track information.",
-    "shuffleCommand": "Shuffle queue.",
-    "repeatCommand": "Repeat a track.",
-    "showListCommand": "Send queue list.",
-    "shutdownCommand": "Shutdown bot.",
+    "connectCommand": ["Connect to voice channel."],
+    "disconnectCommand": ["Disconnect from voice channel."],
+    "queueCommand": ["Add a music into queue."],
+    "skipCommand": ["Skip track(s)."],
+    "volumeCommand": ["Adjusment volume."],
+    "nowPlayingCommand": ["Send now playing track information."],
+    "shuffleCommand": ["Shuffle queue."],
+    "repeatCommand": ["Repeat a track."],
+    "showListCommand": ["Send queue list."],
+    "melonCommand": ["Play tracks in melon charts(Korean music chart platform)"]
+    "pauseCommand": ["Pause track."],
+    "shutdownCommand": ["Shutdown bot."],
 
-    "customPlaylistCommand": "Play custom playlist tracks.",
-    "listGetterCommand": "Send list of custom playlist tracks.",
+    "customPlaylistCommand": ["Play custom playlist tracks(in QuintupleV2)."],
+    "listGetterCommand": ["Send list of custom playlist tracks.(in QuintupleV2)"],
 
     "prefix" : "This is the symbol that precedes the command. You can only write one letter."
 }
