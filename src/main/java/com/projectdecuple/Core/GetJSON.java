@@ -31,7 +31,7 @@ public class GetJSON {
         return result.toString();
     }
 
-    /* Never used code yet.
+    /* Never used codes yet.
     public String postJsonByUrl(String urlS) throws Exception {
         BufferedReader br;
 
@@ -50,7 +50,6 @@ public class GetJSON {
 
         return result.toString();
     }
-     */
 
     public String getJsonByUrlForUserMode(String urlS) throws Exception {
         try {
@@ -74,5 +73,6 @@ public class GetJSON {
             return null;
         }
     }
+     */
 
 }
