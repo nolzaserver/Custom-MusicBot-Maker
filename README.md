@@ -78,6 +78,8 @@ To use the 'Search' feature, you need to set up YouTube API.
 
 ## III. 커스텀 뮤직봇 메이커 세팅
 
+> 이 부분을 스킵하시려면 [E-S-C 툴](https://github.com/playerdecuple/Easy-Set-CMBM)을 이용해 주세요!  
+
 이제 본격적으로 사용해볼 시간입니다. 복사해 둔 Discord 토큰과 Youtube API 키를 준비해야 합니다.  
 1. `TOKEN.txt`에 Discord 토큰을 넣고, `YOUTUBE_API_KEY.txt`에 Youtube API 키를 넣습니다.
 2. `RUN.bat`을 실행하면 잘 실행됩니다.
