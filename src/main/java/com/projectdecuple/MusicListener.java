@@ -568,7 +568,7 @@ public class MusicListener extends ListenerAdapter {
                 int hours = (int) ((af / (1000 * 60 * 60)));
 
                 String timeStamp = r(Message.TIME_STAMP.getMessage(),
-                        "{hour}", String.valueOf(hours), "{minitue}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
+                        "{hour}", String.valueOf(hours), "{minute}", String.valueOf(minutes), "{second}", String.valueOf(seconds));
                 sb = new StringBuffer();
                 EmbedBuilder eb = new EmbedBuilder();
 
