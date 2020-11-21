@@ -22,8 +22,10 @@
     "shutdownBot" : "봇을 종료할게요!",
     "playPlaylist" : "{user}님의 플레이리스트에 있는 {queue_amount}개의 플레이리스트를 모두 재생하겠습니다!",
     "sendPlaylistInfo" : "# {user}님의 플레이리스트 정보입니다 :\n",
+    "enablePause" : "잠깐 기다려 드릴게요!",
+    "disablePause" : "계속 들어 보실까요?",
 
-    "timeStamp" : "{hour}시간 {minitue}분 {second}초",
+    "timeStamp" : "{hour}시간 {minute}분 {second}초",
     "duration" : "곡 길이",
     "youTubeChannel" : "채널"
 }
